@@ -1,20 +1,43 @@
 import requests
 import json
 
+from .response import *
+
+
+class Resources:
+
+    def __init__(self, root):
+        self._root = root
+
+    @property
+    def root(self):
+        return self._root
+
+    @property
+    def achievements(self) -> AchievementsResourceResponse:
+        return AchievementsResourceResponse(self.root.get("/resources/achievements", public=True))
+
 
 class Api:
+
+    class ApiException(BaseException):
+        pass
 
     def __init__(self, key, host="https://api.hypixel.net"):
         self._session = requests.Session()
         self._host = host
         self._key = key
 
-    def get(self, path: str, params: dict = None) -> json:
+        self._resources = Resources(self)
+
+    def get(self, path: str, params: dict = None, public=False, except_on_failure=True) -> json:
         """
         Perform a GET request on the REST API
 
         :param path: REST endpoint to GET
         :param params: Parameters needed for the request
+        :param public: Precise if the Endpoint require a key or not
+        :param except_on_failure: Raise an Exception on failure
         :return: Json object obtain from the request response
         """
         if type(path) is not str:
@@ -25,10 +48,29 @@ class Api:
 
         if not params:
             params = {}
-        params["key"] = self._key
+
+        if not public:
+            params["key"] = self._key
 
         r = self._session.get(f"{self._host}{path}", params=params)
-        if r.status_code != 200:
-            raise Exception("get(): Response is not 200")
+        if except_on_failure and r.status_code != 200:
+            try:
+                j = json.loads(r.text)
+                raise self.ApiException(f"Hypyxel: {j.get('message', 'Unknown Error')}")
+            except:
+                raise self.ApiException("Hypyxel: Unknown Error")
 
         return json.loads(r.text)
+
+    def post(self, path: str) -> json:
+        """
+        Execute a POST request
+        :param path: REST endpoint to POST
+        :return: Json object
+        """
+
+        raise Exception("Hypyxel: POST are not supported")
+
+    @property
+    def resources(self) -> Resources:
+        return self._resources
