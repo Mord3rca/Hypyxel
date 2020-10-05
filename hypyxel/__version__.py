@@ -1,0 +1,7 @@
+__title__ = "hypyxel"
+__description__ = "A Hypixel API access library"
+__url__ = "https://github.com/Mord3rca/Hypyxel"
+__version__ = "0.1"
+__author__ = "Mord3rca"
+__author_email__ = "morderca@morderca.net"
+__license__ = "GPLv3"
