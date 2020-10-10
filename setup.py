@@ -23,6 +23,7 @@ setup(
     author_email=about['__author_email__'],
     url=about['__url__'],
     requires=["requests"],
+    test_requires=['flask'],
     packages=['hypyxel'],
     python_requires='>=3.6.0',
     license=about['__license__'],
