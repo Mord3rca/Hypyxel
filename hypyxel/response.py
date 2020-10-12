@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Tuple
 from .utils import timestamp_to_datetime, datetime
 
 
@@ -86,15 +86,27 @@ class AchievementsResourceResponse(APIResponse):
             self._amount = data.get("amount")
 
         @property
-        def tier(self):
+        def tier(self) -> int:
+            """
+            Get tier number
+            :return: Return tier as int
+            """
             return self._tier
 
         @property
-        def points(self):
+        def points(self) -> int:
+            """
+            Get Points for this tier
+            :return: Return points as int
+            """
             return self._points
 
         @property
-        def amount(self):
+        def amount(self) -> int:
+            """
+            Get required amount for this tier
+            :return: Return required amount as int
+            """
             return self._amount
 
     class HypixelTieredAchievement(HypixelBaseAchievement):
@@ -107,7 +119,11 @@ class AchievementsResourceResponse(APIResponse):
                                 )
 
         @property
-        def tiers(self):
+        def tiers(self) -> Tuple:
+            """
+            Get tiers for this achievements
+            :return: Return table of HypixelAchievementTier
+            """
             return self._tiers
 
     def __init__(self, raw: dict):
