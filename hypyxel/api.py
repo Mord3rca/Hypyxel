@@ -17,6 +17,10 @@ class Resources:
     def achievements(self) -> AchievementsResourceResponse:
         return AchievementsResourceResponse(self.root.get("/resources/achievements", public=True))
 
+    @property
+    def challenges(self) -> ChallengesResourceResponse:
+        return ChallengesResourceResponse(self.root.get("/resources/challenges", public=True))
+
 
 class Api:
 

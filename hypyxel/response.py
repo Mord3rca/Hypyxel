@@ -1,130 +1,49 @@
 from typing import Dict, Tuple
+from .response_objects import *
 from .utils import timestamp_to_datetime, datetime
 
 
 class APIResponse:
     def __init__(self, raw: dict):
         self._raw = raw
+        self._success = False
+        self._error_message = None
+
+    def __parse_data(self):
+
+        self._success = self._raw.get("success")
+        self._error_message = self._raw.get('cause', None)
 
     @property
-    def success(self):
+    def success(self) -> bool:
         return self._raw["success"]
 
     @property
-    def error_message(self):
+    def error_message(self) -> str:
         return self._raw.get("cause", None)
 
 
-class AchievementsResourceResponse(APIResponse):
+class ResourceResponse(APIResponse):
 
-    class HypixelBaseAchievement:
+    def __init__(self, raw: dict):
+        super().__init__(raw)
 
-        def __init__(self, gname, name, data):
-            self._name = name
-            self._gname = gname
-            self._data = data
+        self._last_update = -1
 
-            self._desc = ""
-            self._clean_name = ""
-            self._gamePercentUnlocked = -1
-            self._globalPercentUnlocked = -1
+    def __parse_resource_data(self):
+        self._lastUpdated = self._raw.get('lastUpdated', -1)
 
-            self._secret = False
-            self._legacy = False
+    @property
+    def last_update(self) -> datetime:
+        """
+        Get the last update date
+        :return: datetime object or None in case of error
+        """
+        return timestamp_to_datetime(self._last_update) \
+            if self._last_update != -1 else None
 
-            self._parse_data()
 
-        def __str__(self):
-            return f"{type(self).__name__}(\"{self.display_name}\")"
-
-        def _parse_data(self):
-            self._desc = self._data["description"]
-            self._clean_name = self._data["name"]
-
-            # Those ones are not always there.
-            self._gamePercentUnlocked = self._data.get("gamePercentUnlocked", None)
-            self._globalPercentUnlocked = self._data.get("globalPercentUnlocked", None)
-            self._secret = self._data.get("secret", False)
-            self._legacy = self._data.get("legacy", False)
-
-        @property
-        def display_name(self) -> str:
-            """
-            Get achievement display name
-            :return: Achievement display name as string
-            """
-            return self._clean_name
-
-        @property
-        def description(self) -> str:
-            """
-            Get achievement description
-            :return: Achievement description as string
-            """
-            return self._desc
-
-    class HypixelOneTimeAchievement(HypixelBaseAchievement):
-
-        def __init__(self, gname, name, data):
-            super().__init__(gname, name, data)
-
-            self._point = self._data.get("points", -1)
-
-        @property
-        def point(self) -> int:
-            """
-            Get Achievement point
-            :return: Number of point as int
-            """
-            return self._point
-
-    class HypixelAchievementTier:
-
-        def __init__(self, data):
-            self._tier = data.get("tier")
-            self._points = data.get("points")
-            self._amount = data.get("amount")
-
-        @property
-        def tier(self) -> int:
-            """
-            Get tier number
-            :return: Return tier as int
-            """
-            return self._tier
-
-        @property
-        def points(self) -> int:
-            """
-            Get Points for this tier
-            :return: Return points as int
-            """
-            return self._points
-
-        @property
-        def amount(self) -> int:
-            """
-            Get required amount for this tier
-            :return: Return required amount as int
-            """
-            return self._amount
-
-    class HypixelTieredAchievement(HypixelBaseAchievement):
-
-        def __init__(self, gname, name, data):
-            super().__init__(gname, name, data)
-
-            self._tiers = tuple(AchievementsResourceResponse.HypixelAchievementTier(i)
-                                for i in data.get("tiers", [])
-                                )
-
-        @property
-        def tiers(self) -> Tuple:
-            """
-            Get tiers for this achievements
-            :return: Return table of HypixelAchievementTier
-            """
-            return self._tiers
+class AchievementsResourceResponse(ResourceResponse):
 
     def __init__(self, raw: dict):
         super().__init__(raw)
@@ -137,17 +56,17 @@ class AchievementsResourceResponse(APIResponse):
 
         self._last_update = -1
 
-        self._parse_data()
+        self.__parse_achievements_data()
 
-    def _parse_data(self):
+    def __parse_achievements_data(self):
 
         self._last_update = self._raw.get("lastUpdated", -1)
 
-        self._one_time = {j: [AchievementsResourceResponse.HypixelOneTimeAchievement(j, *i)
+        self._one_time = {j: [HypixelOneTimeAchievement(j, *i)
                               for i in self._raw["achievements"][j]["one_time"].items()]
                           for j in self._raw["achievements"].keys()}
 
-        self._tiered = {j: [AchievementsResourceResponse.HypixelTieredAchievement(j, *i)
+        self._tiered = {j: [HypixelTieredAchievement(j, *i)
                             for i in self._raw["achievements"][j]["one_time"].items()]
                         for j in self._raw["achievements"].keys()}
 
@@ -191,11 +110,10 @@ class AchievementsResourceResponse(APIResponse):
         """
         return self._legacy_points
 
-    @property
-    def last_update(self) -> datetime:
-        """
-        Get the last update date
-        :return: datetime object or None in case of error
-        """
-        return timestamp_to_datetime(self._last_update)\
-            if self._last_update != -1 else None
+
+class ChallengesResourceResponse(ResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self._challenges = dict()
