@@ -32,6 +32,22 @@ class HypixelBaseAchievement:
         self._legacy = self._data.get("legacy", False)
 
     @property
+    def game(self) -> str:
+        """
+        Get the achievement game name
+        :return:
+        """
+        return self._gname
+
+    @property
+    def name(self) -> str:
+        """
+        Get the Achievement DB name
+        :return: Achievement DB name
+        """
+        return self._name
+
+    @property
     def display_name(self) -> str:
         """
         Get achievement display name
@@ -114,18 +130,80 @@ class HypixelTieredAchievement(HypixelBaseAchievement):
         return self._tiers
 
 
-class HypixelChallenge:
+class HypixelChallengeReward:
+    """
+    Object representing challenge reward data
+    """
 
-    def __init__(self, gname:str, data: dict):
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self._type = None
+        self._amount = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+
+        self._type = self.__data.get('type', None)
+        self._amount = self.__data.get('amount', -1)
+
+    @property
+    def type(self) -> str:
+        return self._type
+
+    @property
+    def amount(self) -> int:
+        return self._amount
+
+
+class HypixelChallenge:
+    """
+    Object representing challenge data
+    """
+
+    def __init__(self, gname: str, data: dict):
         self._gname = gname
+        self._data = data
         self._id = None
         self._name = None
         self._rewards = tuple()
 
-        self.__parse_challenge_data(data)
+        self.__parse_challenge_data()
 
-    def __parse_challenge_data(self, data: dict):
-        self._id = data.get('id', None)
-        self._name = data.get('name', None)
-        self._rewards = []
+    def __parse_challenge_data(self):
+        self._id = self._data.get('id', None)
+        self._name = self._data.get('name', None)
+        self._rewards = tuple(HypixelChallengeReward(i) for i in self._data.get('rewards', list()))
 
+    @property
+    def id(self) -> str:
+        """
+        Get the challenge DB id
+        :return: Challenge DB id as string
+        """
+        return self._id
+
+    @property
+    def game(self) -> str:
+        """
+        Get the related challenge game name
+        :return: Game name as string
+        """
+        return self._gname
+
+    @property
+    def name(self) -> str:
+        """
+        Get the challenge name
+        :return: Challenge name
+        """
+        return self._name
+
+    @property
+    def rewards(self) -> Tuple[HypixelChallengeReward]:
+        """
+        Get the rewards list
+        :return: Rewards list
+        """
+        return self._rewards
