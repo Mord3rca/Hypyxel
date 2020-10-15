@@ -30,8 +30,10 @@ class ResourceResponse(APIResponse):
 
         self._last_update = -1
 
+        self.__parse_resource_data()
+
     def __parse_resource_data(self):
-        self._lastUpdated = self._raw.get('lastUpdated', -1)
+        self._last_update = self._raw.get('lastUpdated', -1)
 
     @property
     def last_update(self) -> datetime:
@@ -54,13 +56,9 @@ class AchievementsResourceResponse(ResourceResponse):
         self._points = dict()
         self._legacy_points = dict()
 
-        self._last_update = -1
-
         self.__parse_achievements_data()
 
     def __parse_achievements_data(self):
-
-        self._last_update = self._raw.get("lastUpdated", -1)
 
         self._one_time = {j: [HypixelOneTimeAchievement(j, *i)
                               for i in self._raw["achievements"][j]["one_time"].items()]
@@ -116,4 +114,20 @@ class ChallengesResourceResponse(ResourceResponse):
     def __init__(self, raw: dict):
         super().__init__(raw)
 
-        self._challenges = dict()
+        self._challenges = tuple()
+
+        self.__parse_challenges_data()
+
+    def __parse_challenges_data(self):
+        self._challenges = tuple(HypixelChallenge(j, i)
+                                 for j in self._raw.get('challenges').keys()
+                                 for i in self._raw.get('challenges')[j]
+                                 )
+
+    @property
+    def challenges(self) -> Tuple[HypixelChallenge]:
+        """
+        Get challenges list
+        :return: Challenge list
+        """
+        return self._challenges
