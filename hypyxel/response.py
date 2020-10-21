@@ -60,20 +60,26 @@ class AchievementsResourceResponse(ResourceResponse):
 
     def __parse_achievements_data(self):
 
-        self._one_time = {j: [HypixelOneTimeAchievement(j, *i)
-                              for i in self._raw["achievements"][j]["one_time"].items()]
-                          for j in self._raw["achievements"].keys()}
+        self._one_time = {
+            j: [HypixelOneTimeAchievement(j, *i)
+                for i in self._raw["achievements"][j]["one_time"].items()]
+            for j in self._raw["achievements"].keys()
+        }
 
-        self._tiered = {j: [HypixelTieredAchievement(j, *i)
-                            for i in self._raw["achievements"][j]["one_time"].items()]
-                        for j in self._raw["achievements"].keys()}
+        self._tiered = {
+            j: [HypixelTieredAchievement(j, *i)
+                for i in self._raw["achievements"][j]["one_time"].items()]
+            for j in self._raw["achievements"].keys()
+        }
 
         self._points = {
-            j: self._raw["achievements"][j].get("total_points", -1) for j in self._raw["achievements"].keys()
+            j: self._raw["achievements"][j].get("total_points", -1)
+            for j in self._raw["achievements"].keys()
         }
 
         self._legacy_points = {
-            j: self._raw["achievements"][j].get("total_legacy_points", -1) for j in self._raw["achievements"].keys()
+            j: self._raw["achievements"][j].get("total_legacy_points", -1)
+            for j in self._raw["achievements"].keys()
         }
 
     @property

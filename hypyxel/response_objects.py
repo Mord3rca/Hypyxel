@@ -27,7 +27,8 @@ class HypixelBaseAchievement:
 
         # Those ones are not always there.
         self._gamePercentUnlocked = self._data.get("gamePercentUnlocked", None)
-        self._globalPercentUnlocked = self._data.get("globalPercentUnlocked", None)
+        self._globalPercentUnlocked =\
+            self._data.get("globalPercentUnlocked", None)
         self._secret = self._data.get("secret", False)
         self._legacy = self._data.get("legacy", False)
 
@@ -174,7 +175,9 @@ class HypixelChallenge:
     def __parse_challenge_data(self):
         self._id = self._data.get('id', None)
         self._name = self._data.get('name', None)
-        self._rewards = tuple(HypixelChallengeReward(i) for i in self._data.get('rewards', list()))
+        self._rewards =\
+            tuple(HypixelChallengeReward(i)
+                  for i in self._data.get('rewards', list()))
 
     @property
     def id(self) -> str:

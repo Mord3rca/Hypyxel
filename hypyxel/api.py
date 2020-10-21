@@ -15,11 +15,15 @@ class Resources:
 
     @property
     def achievements(self) -> AchievementsResourceResponse:
-        return AchievementsResourceResponse(self.root.get("/resources/achievements", public=True))
+        return AchievementsResourceResponse(
+            self.root.get("/resources/achievements", public=True)
+        )
 
     @property
     def challenges(self) -> ChallengesResourceResponse:
-        return ChallengesResourceResponse(self.root.get("/resources/challenges", public=True))
+        return ChallengesResourceResponse(
+            self.root.get("/resources/challenges", public=True)
+        )
 
 
 class Api:
@@ -34,7 +38,10 @@ class Api:
 
         self._resources = Resources(self)
 
-    def get(self, path: str, params: dict = None, public=False, except_on_failure=True) -> json:
+    def get(self, path: str,
+            params: dict = None,
+            public=False,
+            except_on_failure=True) -> json:
         """
         Perform a GET request on the REST API
 
@@ -60,7 +67,9 @@ class Api:
         if except_on_failure and r.status_code != 200:
             try:
                 j = json.loads(r.text)
-                raise self.ApiException(f"Hypyxel: {j.get('message', 'Unknown Error')}")
+                raise self.ApiException(
+                    f"Hypyxel: {j.get('message', 'Unknown Error')}"
+                )
             except:
                 raise self.ApiException("Hypyxel: Unknown Error")
 
