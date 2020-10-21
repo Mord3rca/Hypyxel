@@ -10,6 +10,10 @@ app = Flask('TestServer')
 def catchall_get_endpoint(path: str):
     p = f"{path.replace('/', '.')}.{request.method.lower()}"
 
+    if "resources/" not in path:
+        if request.args.get('key') != 'test-key-ftw':
+            return "{'status': false, 'message': 'Invalid API key'}\n", 403
+
     try:
         with app.open_resource(f'response/{p}') as f:
             return f.read()
