@@ -45,6 +45,43 @@ class ResourceResponse(APIResponse):
             if self._last_update != -1 else None
 
 
+class GuildAchievementsResourceResponse(ResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self._one_time = tuple()
+        self._tiered = tuple()
+
+        self.__parse_guild_achievements_data()
+
+    def __parse_guild_achievements_data(self):
+
+        self._one_time = tuple(
+            HypixelOneTimeAchievement(None, *i) for i in self._raw.get('one_time').items()
+        )
+
+        self._tiered = tuple(
+            HypixelTieredAchievement(None, *i) for i in self._raw.get('tiered').items()
+        )
+
+    @property
+    def one_time(self) -> Tuple[HypixelOneTimeAchievement]:
+        """
+        Get One Time Achievement list
+        :return: List of HypixelOneTimeAchievement
+        """
+        return self._one_time
+
+    @property
+    def tiered(self) -> Tuple[HypixelTieredAchievement]:
+        """
+        Get Tiered Achievement list
+        :return: List of HypixelTieredAchievement
+        """
+        return self._tiered
+
+
 class AchievementsResourceResponse(ResourceResponse):
 
     def __init__(self, raw: dict):
@@ -68,7 +105,7 @@ class AchievementsResourceResponse(ResourceResponse):
 
         self._tiered = {
             j: [HypixelTieredAchievement(j, *i)
-                for i in self._raw["achievements"][j]["one_time"].items()]
+                for i in self._raw["achievements"][j]["tiered"].items()]
             for j in self._raw["achievements"].keys()
         }
 
@@ -157,3 +194,21 @@ class QuestsResourceResponse(ResourceResponse):
     @property
     def quests(self):
         return self._quests
+
+
+class PermissionsResourceResponse(ResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self._permissions = tuple()
+
+        self.__parse_permissions_data()
+
+    def __parse_permissions_data(self):
+        self._permissions = tuple(HypixelPermission(i)
+                                  for i in self._raw.get('permissions'))
+
+    @property
+    def permissions(self):
+        return self._permissions

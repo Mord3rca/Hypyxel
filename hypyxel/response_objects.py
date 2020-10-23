@@ -298,3 +298,34 @@ class HypixelQuest:
     @property
     def requirements(self):
         return self._requirements
+
+
+class HypixelPermission:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self._name = None
+        self._desc = None
+        self._item_name = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        info = self.__data.get('en_us', None)
+
+        self._name = info.get('name', None)
+        self._desc = info.get('description', None)
+        self._item_name = info.get('item', {}).get('name', None)
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def desc(self):
+        return self._desc
+
+    @property
+    def item_name(self):
+        return self._item_name

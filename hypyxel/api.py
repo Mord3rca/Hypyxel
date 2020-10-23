@@ -4,6 +4,28 @@ import json
 from .response import *
 
 
+class Guild:
+
+    def __init__(self, root):
+        self.__root = root
+
+    @property
+    def root(self):
+        return self.__root
+
+    @property
+    def achievements(self) -> GuildAchievementsResourceResponse:
+        return GuildAchievementsResourceResponse(
+            self.root.get('/resources/guilds/achievements', public=True)
+        )
+
+    @property
+    def permissions(self) -> PermissionsResourceResponse:
+        return PermissionsResourceResponse(
+            self.root.get('/resources/guilds/permissions', public=True)
+        )
+
+
 class Resources:
 
     def __init__(self, root):
@@ -30,6 +52,10 @@ class Resources:
         return QuestsResourceResponse(
             self.root.get("/resources/quests", public=True)
         )
+
+    @property
+    def guilds(self) -> Guild:
+        return Guild(self._root)
 
 
 class Api:
