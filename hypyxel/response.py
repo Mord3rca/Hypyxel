@@ -137,3 +137,23 @@ class ChallengesResourceResponse(ResourceResponse):
         :return: Challenge list
         """
         return self._challenges
+
+
+class QuestsResourceResponse(ResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self._quests = tuple()
+
+        self.__parse_quests_data()
+
+    def __parse_quests_data(self):
+        self._quests = tuple(HypixelQuest(j, i)
+                             for j in self._raw.get('quests').keys()
+                             for i in self._raw.get('quests')[j]
+                             )
+
+    @property
+    def quests(self):
+        return self._quests

@@ -25,6 +25,12 @@ class Resources:
             self.root.get("/resources/challenges", public=True)
         )
 
+    @property
+    def quests(self) -> QuestsResourceResponse:
+        return QuestsResourceResponse(
+            self.root.get("/resources/quests", public=True)
+        )
+
 
 class Api:
 

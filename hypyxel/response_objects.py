@@ -210,3 +210,91 @@ class HypixelChallenge:
         :return: Rewards list
         """
         return self._rewards
+
+
+class HypixelObjective:
+
+    def __init__(self, data: dict):
+
+        self.__data = data
+        self._id = None
+        self._type = None
+        self._amount = -1
+
+        self.__parse_data()
+
+    def __parse_data(self):
+
+        self._id = self.__data.get('id', None)
+        self._type = self.__data.get('type', None)
+        self._amount = self.__data.get('integer', -1)
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def type(self):
+        return self._type
+
+    @property
+    def amount(self):
+        return self._amount
+
+
+class HypixelQuest:
+
+    def __init__(self, gname, data: dict):
+        self.__data = data
+
+        self._id = None
+        self._name = None
+        self._desc = None
+        self._game = gname
+
+        self._rewards = tuple()
+        self._objectives = tuple()
+        self._requirements = tuple()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+
+        self._id = self.__data.get('id', None)
+        self._name = self.__data.get('name', None)
+        self._desc = self.__data.get('description', None)
+
+        self._requirements = tuple(i.get('type', None)
+                                   for i in self.__data.get('requirements', []))
+        self._rewards = tuple(HypixelChallengeReward(i)
+                              for i in self.__data.get('rewards', []))
+        self._objectives = tuple(HypixelObjective(i)
+                                 for i in self.__data.get('objectives', []))
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def description(self):
+        return self._desc
+
+    @property
+    def game(self):
+        return self._game
+
+    @property
+    def rewards(self):
+        return self._rewards
+
+    @property
+    def objectives(self):
+        return self._objectives
+
+    @property
+    def requirements(self):
+        return self._requirements
