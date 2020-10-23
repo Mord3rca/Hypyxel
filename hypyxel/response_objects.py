@@ -264,12 +264,15 @@ class HypixelQuest:
         self._name = self.__data.get('name', None)
         self._desc = self.__data.get('description', None)
 
-        self._requirements = tuple(i.get('type', None)
-                                   for i in self.__data.get('requirements', []))
-        self._rewards = tuple(HypixelChallengeReward(i)
-                              for i in self.__data.get('rewards', []))
-        self._objectives = tuple(HypixelObjective(i)
-                                 for i in self.__data.get('objectives', []))
+        self._requirements = tuple(
+            i.get('type', None) for i in self.__data.get('requirements', [])
+        )
+        self._rewards = tuple(
+            HypixelChallengeReward(i) for i in self.__data.get('rewards', [])
+        )
+        self._objectives = tuple(
+            HypixelObjective(i) for i in self.__data.get('objectives', [])
+        )
 
     @property
     def id(self):
