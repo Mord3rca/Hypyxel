@@ -58,11 +58,13 @@ class GuildAchievementsResourceResponse(ResourceResponse):
     def __parse_guild_achievements_data(self):
 
         self._one_time = tuple(
-            HypixelOneTimeAchievement(None, *i) for i in self._raw.get('one_time').items()
+            HypixelOneTimeAchievement(None, *i)
+            for i in self._raw.get('one_time').items()
         )
 
         self._tiered = tuple(
-            HypixelTieredAchievement(None, *i) for i in self._raw.get('tiered').items()
+            HypixelTieredAchievement(None, *i)
+            for i in self._raw.get('tiered').items()
         )
 
     @property
