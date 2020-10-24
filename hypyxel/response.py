@@ -125,7 +125,8 @@ class AchievementsResourceResponse(ResourceResponse):
     def one_time(self) -> Dict[str, HypixelOneTimeAchievement]:
         """
         Get One Time Achievement list
-        :return: Dict of HypixelOneTimeAchievements as value and GameType as key
+        :return: Dict of HypixelOneTimeAchievements as value
+                 and GameType as key
         """
         return self._one_time
 
@@ -133,7 +134,8 @@ class AchievementsResourceResponse(ResourceResponse):
     def tiered(self) -> Dict[str, HypixelTieredAchievement]:
         """
         Get Tiered Achievement list
-        :return: Dict of HypixelTieredAchievement as value and GameType as key
+        :return: Dict of HypixelTieredAchievement as value
+                 and GameType as key
         """
         return self._tiered
 
@@ -148,7 +150,8 @@ class AchievementsResourceResponse(ResourceResponse):
     @property
     def total_legacy_points(self) -> Dict[str, int]:
         """
-        Get a dictionary containing game name as key & total legacy points as value
+        Get a dictionary containing game name as key &
+        total legacy points as value
         :return: Dictionary of gamename : legacy points
         """
         return self._legacy_points
@@ -194,7 +197,11 @@ class QuestsResourceResponse(ResourceResponse):
                              )
 
     @property
-    def quests(self):
+    def quests(self) -> Tuple[HypixelQuest]:
+        """
+        Get quests list
+        :return: Quest list
+        """
         return self._quests
 
 
@@ -212,7 +219,11 @@ class PermissionsResourceResponse(ResourceResponse):
                                   for i in self._raw.get('permissions'))
 
     @property
-    def permissions(self):
+    def permissions(self) -> Tuple[HypixelPermission]:
+        """
+        Get permission list
+        :return: Permission list
+        """
         return self._permissions
 
 
@@ -229,7 +240,11 @@ class SkyblockResourceResponse(ResourceResponse):
         self.__version = self._raw.get('version', None)
 
     @property
-    def version(self):
+    def version(self) -> str:
+        """
+        Get Skyblock version
+        :return: skyblock version
+        """
         return self.__version
 
 
@@ -250,7 +265,11 @@ class SkyblockCollectionsResponse(SkyblockResourceResponse):
         }
 
     @property
-    def collections(self):
+    def collections(self) -> Dict[str, HypixelSkyblockCollection]:
+        """
+        Get Skyblock collections
+        :return: Skyblock Collection as a dict (collection ID as key)
+        """
         return self.__collections
 
 
@@ -270,5 +289,9 @@ class SkyblockSkillsResponse(SkyblockResourceResponse):
         }
 
     @property
-    def skills(self):
+    def skills(self) -> Dict[str, HypixelSkyblockSkill]:
+        """
+        Get skills collections
+        :return: Skyblock skill collections as a dict (skill ID as key)
+        """
         return self.__skills
