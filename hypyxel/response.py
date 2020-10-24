@@ -214,3 +214,61 @@ class PermissionsResourceResponse(ResourceResponse):
     @property
     def permissions(self):
         return self._permissions
+
+
+class SkyblockResourceResponse(ResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__version = None
+
+        self.__parse_skyblock_data()
+
+    def __parse_skyblock_data(self):
+        self.__version = self._raw.get('version', None)
+
+    @property
+    def version(self):
+        return self.__version
+
+
+class SkyblockCollectionsResponse(SkyblockResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__collections = dict()
+
+        self.__parse_collections_data()
+
+    def __parse_collections_data(self):
+
+        self.__collections = {
+            i: HypixelSkyblockCollection(i, self._raw.get('collections')[i])
+            for i in self._raw.get('collections', {}).keys()
+        }
+
+    @property
+    def collections(self):
+        return self.__collections
+
+
+class SkyblockSkillsResponse(SkyblockResourceResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__skills = dict()
+
+        self.__parse_skills_data()
+
+    def __parse_skills_data(self):
+        self.__skills = {
+            i: HypixelSkyblockSkill(i, self._raw.get('collections')[i])
+            for i in self._raw.get('collections', {}).keys()
+        }
+
+    @property
+    def skills(self):
+        return self.__skills
