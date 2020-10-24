@@ -26,6 +26,28 @@ class Guild:
         )
 
 
+class Skyblock:
+
+    def __init__(self, root):
+        self.__root = root
+
+    @property
+    def root(self):
+        return self.__root
+
+    @property
+    def collections(self) -> SkyblockCollectionsResponse:
+        return SkyblockCollectionsResponse(
+            self.root.get('/resources/skyblock/collections', public=True)
+        )
+
+    @property
+    def skills(self) -> SkyblockSkillsResponse:
+        return SkyblockSkillsResponse(
+            self.root.get('/resources/skyblock/skills', public=True)
+        )
+
+
 class Resources:
 
     def __init__(self, root):
@@ -56,6 +78,10 @@ class Resources:
     @property
     def guilds(self) -> Guild:
         return Guild(self._root)
+
+    @property
+    def skyblock(self) -> Skyblock:
+        return Skyblock(self._root)
 
 
 class Api:

@@ -332,3 +332,175 @@ class HypixelPermission:
     @property
     def item_name(self):
         return self._item_name
+
+
+class HypixelSkyblockItemTier:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__tier = -1
+        self.__amountRequired = -1
+        self.__unlocks = tuple()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__tier = self.__data.get('tier', -1)
+        self.__amountRequired = self.__data.get('amountRequired', -1)
+        self.__unlocks = tuple(
+            self.__data.get('unlocks', [])
+        )
+
+    @property
+    def tier(self):
+        return self.__tier
+
+    @property
+    def amount_required(self):
+        return self.__amountRequired
+
+    @property
+    def unlocks(self):
+        return self.__unlocks
+
+
+class HypixelSkyblockItemCollection:
+
+    def __init__(self, id: str, data: dict):
+        self.__data = data
+
+        self.__id = id
+        self.__name = None
+        self.__maxTier = -1
+        self.__tiers = tuple()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__name = self.__data.get('name', None)
+        self.__maxTier = self.__data.get('maxTiers', -1)
+        self.__tiers = tuple(
+            HypixelSkyblockItemTier(i) for i in self.__data.get('tiers', [])
+        )
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def max_tier(self):
+        return self.__maxTier
+
+    @property
+    def tiers(self):
+        return self.__tiers
+
+
+class HypixelSkyblockCollection:
+
+    def __init__(self, id: str, data: dict):
+
+        self._data = data
+
+        self._id = id
+        self._name = None
+        self._items = tuple()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+
+        self._name = self._data.get('name', None)
+
+        self._items = tuple(
+            HypixelSkyblockItemCollection(i, self._data.get('items')[i])
+            for i in self._data.get('items', {}).keys()
+        )
+
+    @property
+    def id(self):
+        return self._id
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def items(self):
+        return self._items
+
+
+class HypixelSkyblockSkillLevel:
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__level = -1
+        self.__exprequired = -1
+        self.__unlocks = tuple()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__level = self.__data.get('level', -1)
+        self.__exprequired = self.__data.get('totalExpRequired', -1)
+        self.__unlocks = tuple(
+            self.__data.get('unlocks')
+        )
+
+    @property
+    def level(self):
+        return self.__level
+
+    @property
+    def required_experience(self):
+        return self.__exprequired
+
+    @property
+    def unlocks(self):
+        return self.__unlocks
+
+
+class HypixelSkyblockSkill:
+    def __init__(self, id: str, data: dict):
+        self.__data = data
+
+        self.__id = id
+        self.__name = None
+        self.__desc = None
+        self.__maxlevel = -1
+        self.__levels = -1
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__name = self.__data.get('name', None)
+        self.__desc = self.__data.get('description', None)
+        self.__maxlevel = self.__data.get('maxLevel', -1)
+        self.__levels = tuple(
+            HypixelSkyblockSkillLevel(i) for i in self.__data.get('levels', ())
+        )
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def description(self):
+        return self.__desc
+
+    @property
+    def max_level(self):
+        return self.__maxlevel
+
+    @property
+    def levels(self):
+        return self.__levels
