@@ -59,28 +59,48 @@ class Resources:
 
     @property
     def achievements(self) -> AchievementsResourceResponse:
+        """
+        Perform GET request on /resources/achievements endpoint
+        :return: AchievementsResourceResponse object
+        """
         return AchievementsResourceResponse(
             self.root.get("/resources/achievements", public=True)
         )
 
     @property
     def challenges(self) -> ChallengesResourceResponse:
+        """
+        Perform GET request on /resources/challenges endpoint
+        :return: ChallengesResourceResponse object
+        """
         return ChallengesResourceResponse(
             self.root.get("/resources/challenges", public=True)
         )
 
     @property
     def quests(self) -> QuestsResourceResponse:
+        """
+        Perform GET request on /resources/quests endpoint
+        :return: QuestsResourceResponse object
+        """
         return QuestsResourceResponse(
             self.root.get("/resources/quests", public=True)
         )
 
     @property
     def guilds(self) -> Guild:
+        """
+        Get an object responsible for /resources/guilds/* endpoints
+        :return: Guild object
+        """
         return Guild(self._root)
 
     @property
     def skyblock(self) -> Skyblock:
+        """
+        Get an object responsible for /resources/skyblock/* endpoints
+        :return: Skyblock object
+        """
         return Skyblock(self._root)
 
 
@@ -144,4 +164,8 @@ class Api:
 
     @property
     def resources(self) -> Resources:
+        """
+        Get the object responsible for resources/* requests
+        :return: Resources object
+        """
         return self._resources

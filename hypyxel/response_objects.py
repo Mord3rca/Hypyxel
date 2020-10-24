@@ -213,6 +213,9 @@ class HypixelChallenge:
 
 
 class HypixelObjective:
+    """
+    Object representing a Objective
+    """
 
     def __init__(self, data: dict):
 
@@ -230,19 +233,34 @@ class HypixelObjective:
         self._amount = self.__data.get('integer', -1)
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get the objective ID
+        :return: Objective ID
+        """
         return self._id
 
     @property
-    def type(self):
+    def type(self) -> str:
+        """
+        Get the objective type
+        :return: Objective type
+        """
         return self._type
 
     @property
-    def amount(self):
+    def amount(self) -> int:
+        """
+        Get the objective amount
+        :return: Objective amount
+        """
         return self._amount
 
 
 class HypixelQuest:
+    """
+    Object representing a Quest
+    """
 
     def __init__(self, gname, data: dict):
         self.__data = data
@@ -275,35 +293,66 @@ class HypixelQuest:
         )
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get the Quest's ID
+        :return: Quest ID
+        """
         return self._id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Get the Quest's name
+        :return: Quest name
+        """
         return self._name
 
     @property
-    def description(self):
+    def description(self) -> str:
+        """
+        Get the Quest's description
+        :return: Quest description
+        """
         return self._desc
 
     @property
-    def game(self):
+    def game(self) -> str:
+        """
+        Get the related game for this quest
+        :return: Related game for quest
+        """
         return self._game
 
     @property
-    def rewards(self):
+    def rewards(self) -> Tuple[HypixelChallengeReward]:
+        """
+        Get the rewards list
+        :return: Rewards list
+        """
         return self._rewards
 
     @property
-    def objectives(self):
+    def objectives(self) -> Tuple[HypixelObjective]:
+        """
+        Get the Objective list
+        :return: Objective list
+        """
         return self._objectives
 
     @property
-    def requirements(self):
+    def requirements(self) -> Tuple[str]:
+        """
+        Get the requirement list
+        :return: Requirement list
+        """
         return self._requirements
 
 
 class HypixelPermission:
+    """
+    Object representing a Permission
+    """
 
     def __init__(self, data: dict):
         self.__data = data
@@ -322,19 +371,34 @@ class HypixelPermission:
         self._item_name = info.get('item', {}).get('name', None)
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Get Permission's name
+        :return: Permission name
+        """
         return self._name
 
     @property
-    def desc(self):
+    def desc(self) -> str:
+        """
+        Get Permission's description
+        :return: Permission description
+        """
         return self._desc
 
     @property
-    def item_name(self):
+    def item_name(self) -> str:
+        """
+        Get Permission's item
+        :return: Permission item
+        """
         return self._item_name
 
 
 class HypixelSkyblockItemTier:
+    """
+    Object representing a Skyblock Item Tier
+    """
 
     def __init__(self, data: dict):
         self.__data = data
@@ -353,19 +417,34 @@ class HypixelSkyblockItemTier:
         )
 
     @property
-    def tier(self):
+    def tier(self) -> int:
+        """
+        Get the tier number
+        :return: Tier
+        """
         return self.__tier
 
     @property
-    def amount_required(self):
+    def amount_required(self) -> int:
+        """
+        Get the amount of item required
+        :return: Item amount
+        """
         return self.__amountRequired
 
     @property
-    def unlocks(self):
+    def unlocks(self) -> Tuple[str]:
+        """
+        Get unlock list
+        :return: Unlock list
+        """
         return self.__unlocks
 
 
 class HypixelSkyblockItemCollection:
+    """
+    Object representing a Skyblock Item Collection
+    """
 
     def __init__(self, id: str, data: dict):
         self.__data = data
@@ -385,23 +464,42 @@ class HypixelSkyblockItemCollection:
         )
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get the item collection ID
+        :return: Collection ID
+        """
         return self.__id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Get the item collection name
+        :return: Collection Name
+        """
         return self.__name
 
     @property
-    def max_tier(self):
+    def max_tier(self) -> int:
+        """
+        Get the item Collection's maximum tier
+        :return: Collection max tier
+        """
         return self.__maxTier
 
     @property
-    def tiers(self):
+    def tiers(self) -> Tuple[HypixelSkyblockItemTier]:
+        """
+        Get the item collection tier list
+        :return: Tier list
+        """
         return self.__tiers
 
 
 class HypixelSkyblockCollection:
+    """
+    Object representing a Skyblock Collection
+    """
 
     def __init__(self, id: str, data: dict):
 
@@ -423,19 +521,35 @@ class HypixelSkyblockCollection:
         )
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get collection ID
+        :return: Collection ID
+        """
         return self._id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Get collection name
+        :return: Collection Name
+        """
         return self._name
 
     @property
-    def items(self):
+    def items(self) -> Tuple[HypixelSkyblockItemCollection]:
+        """
+        Get Collection's item
+        :return: Collection Items
+        """
         return self._items
 
 
 class HypixelSkyblockSkillLevel:
+    """
+    Object representing a Skyblock Skill Level
+    """
+
     def __init__(self, data: dict):
         self.__data = data
 
@@ -453,19 +567,35 @@ class HypixelSkyblockSkillLevel:
         )
 
     @property
-    def level(self):
+    def level(self) -> int:
+        """
+        Get skill level
+        :return: Skill level
+        """
         return self.__level
 
     @property
-    def required_experience(self):
+    def required_experience(self) -> int:
+        """
+        Get skill required experience
+        :return: Skill Required Experience
+        """
         return self.__exprequired
 
     @property
-    def unlocks(self):
+    def unlocks(self) -> Tuple[str]:
+        """
+        Get unlock list
+        :return: Unlock list
+        """
         return self.__unlocks
 
 
 class HypixelSkyblockSkill:
+    """
+    Object representing a Skyblock Skill
+    """
+
     def __init__(self, id: str, data: dict):
         self.__data = data
 
@@ -473,7 +603,7 @@ class HypixelSkyblockSkill:
         self.__name = None
         self.__desc = None
         self.__maxlevel = -1
-        self.__levels = -1
+        self.__levels = tuple()
 
         self.__parse_data()
 
@@ -486,21 +616,41 @@ class HypixelSkyblockSkill:
         )
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get Skill ID
+        :return: skill ID
+        """
         return self.__id
 
     @property
-    def name(self):
+    def name(self) -> str:
+        """
+        Get skill name
+        :return: Skill name
+        """
         return self.__name
 
     @property
-    def description(self):
+    def description(self) -> str:
+        """
+        Get skill description
+        :return: Skill description
+        """
         return self.__desc
 
     @property
-    def max_level(self):
+    def max_level(self) -> int:
+        """
+        Get skill max level
+        :return: Skill max level
+        """
         return self.__maxlevel
 
     @property
-    def levels(self):
+    def levels(self) -> Tuple[HypixelSkyblockSkillLevel]:
+        """
+        Get level list
+        :return: Skill level list
+        """
         return self.__levels
