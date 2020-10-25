@@ -1,4 +1,5 @@
-from typing import Dict, Tuple
+from typing import Dict, Tuple, Union
+from .utils import timestamp_to_datetime, datetime
 
 
 class HypixelBaseAchievement:
@@ -654,3 +655,196 @@ class HypixelSkyblockSkill:
         :return: Skill level list
         """
         return self.__levels
+
+
+class RecentGame:
+
+    def __init__(self, data: dict):
+
+        self.__data = data
+
+        self.__begin = -1
+        self.__end = -1
+        self.__game = None
+        self.__mode = None
+        self.__map = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+
+        self.__begin = self.__data.get('date', -1)
+        self.__end = self.__data.get('ended', -1)
+        self.__game = self.__data.get('gameType', None)
+        self.__mode = self.__data.get('mode', None)
+        self.__map = self.__data.get('map', None)
+
+    @property
+    def begin(self) -> datetime:
+        return timestamp_to_datetime(self.__begin)
+
+    @property
+    def end(self) -> datetime:
+        return timestamp_to_datetime(self.__end)\
+            if self.__end > -1 else None
+
+    @property
+    def game(self) -> str:
+        return self.__game
+
+    @property
+    def mode(self) -> str:
+        return self.__mode
+
+    @property
+    def map(self) -> str:
+        return self.__map
+
+    def still_playing(self) -> bool:
+        return self.__end == -1
+
+
+class Booster:
+
+    def __init__(self, data: dict):
+
+        self.__data = data
+
+        self.__id = None
+        self.__purchaser_uuid = None
+        self.__amount = -1
+        self.__original_length = -1
+        self.__length = -1
+        self.__game = -1
+        self.__date_activated = -1
+        self.__stacked = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__id = self.__data.get('_id', None)
+        self.__purchaser_uuid = self.__data.get('purchaserUuid', None)
+        self.__amount = self.__data.get('amount', -1)
+        self.__original_length = self.__data.get('originalLength', -1)
+        self.__length = self.__data.get('length', -1)
+        self.__game = self.__data.get('gameType', -1)
+        self.__date_activated = self.__data.get('dateActivated', -1)
+
+        stacked = self.__data.get('stacked', False)
+        self.__stacked = stacked if type(stacked) == bool else (i for i in stacked)
+
+    @property
+    def id(self) -> str:
+        return self.__id
+
+    @property
+    def purchaser(self) -> str:
+        return self.__purchaser_uuid
+
+    @property
+    def amount(self) -> int:
+        return self.__amount
+
+    @property
+    def original_length(self) -> int:
+        return self.__original_length
+
+    @property
+    def remaining_length(self) -> int:
+        return self.__length
+
+    @property
+    def game(self) -> int:
+        return self.__game
+
+    @property
+    def date(self) -> datetime:
+        return timestamp_to_datetime(self.__date_activated)\
+            if self.__date_activated > -1 else None
+
+    @property
+    def stacked(self) -> Union[bool, Tuple[str]]:
+        return self.__stacked
+
+
+class GuildMember:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__uuid = None
+        self.__rank = None
+        self.__joined = -1
+        self.__quests_part = -1
+        self.__exp_hist = dict()
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__uuid = self.__data.get('uuid', None)
+        self.__rank = self.__data.get('rank', None)
+        self.__joined = self.__data.get('joined', -1)
+        self.__quests_part = self.__data.get('questParticipation', -1)
+        self.__exp_hist = self.__data.get('expHistory', {})
+
+    @property
+    def id(self) -> str:
+        return self.__uuid
+
+    @property
+    def rank(self) -> str:
+        return self.__rank
+
+    @property
+    def joined(self) -> datetime:
+        return timestamp_to_datetime(self.__joined)\
+            if self.__joined > 0 else None
+
+    @property
+    def quests_participation(self) -> int:
+        return self.__quests_part
+
+    @property
+    def exp_history(self) -> Dict[str, int]:
+        return self.__exp_hist
+
+
+class GuildRank:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__name = None
+        self.__default = None
+        self.__tag = None
+        self.__created = None
+        self.__priority = -1
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__name = self.__data.get('name', None)
+        self.__default = self.__data.get('default', None)
+        self.__tag = self.__data.get('tag', None)
+        self.__created = self.__data.get('created', None)
+        self.__priority = self.__data.get('priority', None)
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @property
+    def default(self) -> bool:
+        return self.__default
+
+    @property
+    def tag(self) -> str:
+        return self.__tag
+
+    @property
+    def created(self) -> datetime:
+        return timestamp_to_datetime(self.__created)
+
+    @property
+    def priority(self) -> int:
+        return self.__priority
