@@ -301,3 +301,281 @@ class SkyblockSkillsResponse(SkyblockResourceResponse):
         :return: Skyblock skill collections as a dict (skill ID as key)
         """
         return self.__skills
+
+
+class StatusResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__online = None
+        self.__game_type = None
+        self.__mode = None
+        self.__map = None
+
+        self.__parse_status_data()
+
+    def __parse_status_data(self):
+        d = self._raw.get('session', {})
+
+        self.__online = d.get('online', False)
+        self.__game_type = d.get('gameType', None)
+        self.__mode = d.get('mode', None)
+        self.__map = d.get('map', None)
+
+    @property
+    def online(self) -> bool:
+        return self.__online
+
+    @property
+    def game(self) -> str:
+        return self.__game_type
+
+    @property
+    def mode(self) -> str:
+        return self.__mode
+
+    @property
+    def map(self) -> str:
+        return self.__map
+
+
+class KeyResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__key = None
+        self.__owner = None
+        self.__limit = -1
+        self.__queries = -1
+        self.__total_queries = -1
+
+        self.__parse_key_data()
+
+    def __parse_key_data(self):
+        d = self._raw.get('record', {})
+
+        self.__key = d.get('key', None)
+        self.__owner = d.get('owner', None)
+        self.__limit = d.get('limit', -1)
+        self.__queries = d.get('queriesInPastMin', -1)
+        self.__total_queries = d.get('totalQueries', -1)
+
+    @property
+    def key(self) -> str:
+        return self.__key
+
+    @property
+    def owner(self) -> str:
+        return self.__owner
+
+    @property
+    def limit(self) -> int:
+        return self.__limit
+
+    @property
+    def queries(self) -> int:
+        return self.__queries
+
+    @property
+    def total_queries(self) -> int:
+        return self.__total_queries
+
+
+class WatchdogResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__last_minute = -1
+        self.__staff_rolling = -1
+        self.__total = -1
+        self.__rolling = -1
+        self.__staff_total = -1
+
+        self.__parse_watchdog_data()
+
+    def __parse_watchdog_data(self):
+
+        self.__last_minute = self.raw.get('watchdog_lastMinute', -1)
+        self.__staff_rolling = self.raw.get('staff_rollingDaily', -1)
+        self.__total = self.raw.get('watchdog_total', -1)
+        self.__rolling = self.raw.get('watchdog_rollingDaily', -1)
+        self.__staff_total = self.raw.get('staff_total', -1)
+
+    @property
+    def last_minute(self) -> int:
+        return self.__last_minute
+
+    @property
+    def staff_rolling(self) -> int:
+        return self.__staff_rolling
+
+    @property
+    def total(self) -> int:
+        return self.__total
+
+    @property
+    def rolling(self) -> int:
+        return self.__rolling
+
+    @property
+    def staff_total(self) -> int:
+        return self.__staff_total
+
+
+class RecentGamesResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__games = tuple()
+
+        self.__parse_recent_game_data()
+
+    def __parse_recent_game_data(self):
+
+        self.__games = tuple(
+            RecentGame(i) for i in self.raw.get('games', ())
+        )
+
+    @property
+    def games(self) -> Tuple[RecentGame]:
+        return self.__games
+
+
+class BoostersResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__boosters = tuple()
+        self.__decrementing = None
+
+        self.__parse_boosters_data()
+
+    def __parse_boosters_data(self):
+        self.__boosters = tuple(Booster(i) for i in self.raw.get('boosters'))
+        self.__decrementing = self.raw.get('boosterState').get('decrementing')
+
+    @property
+    def boosters(self) -> Tuple[Booster]:
+        return self.__boosters
+
+    @property
+    def decrementing(self) -> bool:
+        return self.__decrementing
+
+
+class GuildResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__id = None
+        self.__name = None
+        self.__coins = -1
+        self.__max_coins = -1
+        self.__created = -1
+        self.__members = tuple()
+        self.__tag = None
+        self.__achievements = dict()
+        self.__exp = -1
+        self.__legacy_ranking = -1
+        self.__ranks = tuple()
+        self.__chat_mute = -1
+        self.__pref_games = tuple()
+        self.__public_listed = None
+        self.__tag_color = None
+        self.__exp_by_game = dict()
+
+        self.__parse_guild_data()
+
+    def __parse_guild_data(self):
+        d = self.raw.get('guild', {})
+
+        self.__id = d.get('_id', None)
+        self.__name = d.get('name', None)
+        self.__coins = d.get('coins', -1)
+        self.__max_coins = d.get('coinsEver', -1)
+        self.__created = d.get('created', -1)
+        self.__members = tuple(
+            GuildMember(i) for i in d.get('members', ())
+        )
+        self.__tag = d.get('tag', None)
+        self.__achievements = d.get('achievements', None)
+        self.__exp = d.get('exp', -1)
+        self.__legacy_ranking = d.get('legacyRanking', -1)
+        self.__ranks = tuple(
+            GuildRank(i) for i in d.get('ranks', ())
+        )
+        self.__chat_mute = d.get('chatMute', -1)
+        self.__pref_games = d.get('preferredGames', None)
+        self.__public_listed = d.get('publiclyListed', None)
+        self.__tag_color = d.get('tagColor', None)
+        self.__exp_by_game = d.get('guildExpByGameType', None)
+
+    @property
+    def id(self) -> str:
+        return self.__id
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+    @property
+    def coins(self) -> int:
+        return self.__coins
+
+    @property
+    def max_coins(self) -> int:
+        return self.__max_coins
+
+    @property
+    def created(self) -> datetime:
+        return timestamp_to_datetime(self.__created)
+
+    @property
+    def members(self) ->  Tuple[GuildMember]:
+        return self.__members
+
+    @property
+    def tag(self) -> str:
+        return self.__tag
+
+    @property
+    def achievements(self) -> Dict[str, int]:
+        return self.__achievements
+
+    @property
+    def exp(self) -> int:
+        return self.__exp
+
+    @property
+    def legacy_rank(self) -> int:
+        return self.__legacy_ranking
+
+    @property
+    def ranks(self) -> Tuple[GuildRank]:
+        return self.__ranks
+
+    @property
+    def chat_mute(self) -> int:
+        return self.__chat_mute
+
+    @property
+    def preferred_games(self) -> Tuple[str]:
+        return self.__pref_games
+
+    @property
+    def publicly_listed(self) -> bool:
+        return self.__public_listed
+
+    @property
+    def tag_color(self) -> str:
+        return self.__tag_color
+
+    @property
+    def exp_by_game(self) -> Dict[str, int]:
+        return self.__exp_by_game

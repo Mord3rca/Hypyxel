@@ -169,3 +169,78 @@ class Api:
         :return: Resources object
         """
         return self._resources
+
+    def status(self, uuid: str) -> StatusResponse:
+        """
+        Get player status
+        :param uuid: Player UUID
+        :return: Status Response
+        """
+        return StatusResponse(
+            self.get('/status', params={'uuid': uuid})
+        )
+
+    @property
+    def watchdog(self) -> WatchdogResponse:
+        """
+        Get Watchdog Status
+        :return: Watchdog object
+        """
+        return WatchdogResponse(
+            self.get('/watchdogstats')
+        )
+
+    @property
+    def key(self) -> KeyResponse:
+        """
+        Get Key Info
+        :return: Key object
+        """
+        return KeyResponse(
+            self.get('/key')
+        )
+
+    @property
+    def player_count(self) -> int:
+        """
+        Get the number of online player
+        :return: Online player
+        """
+        r = self.get('/playerCount')
+        return r.get('playerCount')
+
+    def find_guild(self, name: str = None, uuid: str = None) -> str:
+        """
+        Get Guild ID
+        :param name: Find by name
+        :param uuid: Find by player UUID
+        :return: Guild ID
+        """
+        if not bool(name) ^ bool(uuid):
+            raise ValueError("One of uuid or name need to be set")
+
+        p = {'byName': name} if name else {'byUuid': uuid}
+        r = self.get('/findGuild', params=p)
+        return r.get('guild', None)
+
+    @property
+    def boosters(self):
+        return BoostersResponse(
+            self.get('/boosters')
+        )
+
+    def guild(self, id: str = None,
+              player: str = None,
+              name: str = None):
+        if not bool(id) ^ bool(player) ^ bool(name):
+            ValueError('One of id, player or name need to be set')
+
+        p = {}
+        for k, v in (('id', id), ('player', player), ('name', name)):
+            if v:
+                p = {k: v}
+                break
+
+        return GuildResponse(
+            self.get('/guild', params=p)
+        )
