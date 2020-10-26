@@ -34,12 +34,12 @@ class ResourceResponse(APIResponse):
     def __init__(self, raw: dict):
         super().__init__(raw)
 
-        self._last_update = -1
+        self._last_update = None
 
         self.__parse_resource_data()
 
     def __parse_resource_data(self):
-        self._last_update = self._raw.get('lastUpdated', -1)
+        self._last_update = self._raw.get('lastUpdated', None)
 
     @property
     def last_update(self) -> datetime:
@@ -47,8 +47,7 @@ class ResourceResponse(APIResponse):
         Get the last update date
         :return: datetime object or None in case of error
         """
-        return timestamp_to_datetime(self._last_update) \
-            if self._last_update != -1 else None
+        return timestamp_to_datetime(self._last_update)
 
 
 class GuildAchievementsResourceResponse(ResourceResponse):
@@ -499,7 +498,7 @@ class GuildResponse(APIResponse):
         self.__name = d.get('name', None)
         self.__coins = d.get('coins', -1)
         self.__max_coins = d.get('coinsEver', -1)
-        self.__created = d.get('created', -1)
+        self.__created = d.get('created', None)
         self.__members = tuple(
             GuildMember(i) for i in d.get('members', ())
         )
