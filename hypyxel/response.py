@@ -9,18 +9,24 @@ class APIResponse:
         self._success = False
         self._error_message = None
 
+        self.__parse_data()
+
     def __parse_data(self):
 
         self._success = self._raw.get("success")
         self._error_message = self._raw.get('cause', None)
 
     @property
+    def raw(self) -> dict:
+        return self._raw
+
+    @property
     def success(self) -> bool:
-        return self._raw["success"]
+        return self._success
 
     @property
     def error_message(self) -> str:
-        return self._raw.get("cause", None)
+        return self._error_message
 
 
 class ResourceResponse(APIResponse):
