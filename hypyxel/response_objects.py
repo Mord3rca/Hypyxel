@@ -673,8 +673,8 @@ class RecentGame:
 
     def __parse_data(self):
 
-        self.__begin = self.__data.get('date', -1)
-        self.__end = self.__data.get('ended', -1)
+        self.__begin = self.__data.get('date', None)
+        self.__end = self.__data.get('ended', None)
         self.__game = self.__data.get('gameType', None)
         self.__mode = self.__data.get('mode', None)
         self.__map = self.__data.get('map', None)
@@ -685,8 +685,7 @@ class RecentGame:
 
     @property
     def end(self) -> datetime:
-        return timestamp_to_datetime(self.__end)\
-            if self.__end > -1 else None
+        return timestamp_to_datetime(self.__end)
 
     @property
     def game(self) -> str:
@@ -728,7 +727,7 @@ class Booster:
         self.__original_length = self.__data.get('originalLength', -1)
         self.__length = self.__data.get('length', -1)
         self.__game = self.__data.get('gameType', -1)
-        self.__date_activated = self.__data.get('dateActivated', -1)
+        self.__date_activated = self.__data.get('dateActivated', None)
 
         stacked = self.__data.get('stacked', False)
         self.__stacked = stacked if type(stacked) == bool else (i for i in stacked)
@@ -759,8 +758,7 @@ class Booster:
 
     @property
     def date(self) -> datetime:
-        return timestamp_to_datetime(self.__date_activated)\
-            if self.__date_activated > -1 else None
+        return timestamp_to_datetime(self.__date_activated)
 
     @property
     def stacked(self) -> Union[bool, Tuple[str]]:
@@ -783,7 +781,7 @@ class GuildMember:
     def __parse_data(self):
         self.__uuid = self.__data.get('uuid', None)
         self.__rank = self.__data.get('rank', None)
-        self.__joined = self.__data.get('joined', -1)
+        self.__joined = self.__data.get('joined', None)
         self.__quests_part = self.__data.get('questParticipation', -1)
         self.__exp_hist = self.__data.get('expHistory', {})
 
@@ -797,8 +795,7 @@ class GuildMember:
 
     @property
     def joined(self) -> datetime:
-        return timestamp_to_datetime(self.__joined)\
-            if self.__joined > 0 else None
+        return timestamp_to_datetime(self.__joined)
 
     @property
     def quests_participation(self) -> int:

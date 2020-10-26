@@ -8,4 +8,5 @@ def timestamp_to_datetime(t: int, b: int = 1000) -> datetime:
     :param b: Base (default to 1000: milliseconds)
     :return: datetime
     """
-    return datetime.fromtimestamp(t / b)
+
+    return datetime.fromtimestamp(t / b) if t else None
