@@ -255,3 +255,9 @@ class Api:
         return GameCountsResponse(
             self.get('/gameCounts')
         )
+
+    def recent_games(self, uuid: str) -> RecentGamesResponse:
+        return RecentGamesResponse(
+            self.get('/recentGames', params={'uuid': uuid})
+        )
+
