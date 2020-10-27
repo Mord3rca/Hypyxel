@@ -261,3 +261,8 @@ class Api:
             self.get('/recentGames', params={'uuid': uuid})
         )
 
+    @property
+    def leaderboards(self) -> LeaderboardResponse:
+        return LeaderboardResponse(
+            self.get('/leaderboards')
+        )
