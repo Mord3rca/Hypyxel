@@ -578,3 +578,47 @@ class GuildResponse(APIResponse):
     @property
     def exp_by_game(self) -> Dict[str, int]:
         return self.__exp_by_game
+
+
+class FriendResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__friends = tuple()
+
+        self.__parse_friend_data()
+
+    def __parse_friend_data(self):
+        self.__friends = tuple(
+            Friend(i) for i in self.raw.get('records', ())
+        )
+
+    @property
+    def friends(self) -> Tuple[Friend]:
+        return self.__friends
+
+
+class GameCountsResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__games = None
+        self.__player_count = None
+
+        self.__parse_gamecounts_data()
+
+    def __parse_gamecounts_data(self):
+        self.__games = {
+            k: GameStatus(v) for k, v in self.raw.get('games', {}).items()
+        }
+        self.__player_count = self.raw.get('playerCount', None)
+
+    @property
+    def games(self) -> Dict[str, GameStatus]:
+        return self.__games
+
+    @property
+    def player_count(self) -> int:
+        return self.__player_count

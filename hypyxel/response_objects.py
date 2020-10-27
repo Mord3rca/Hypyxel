@@ -845,3 +845,61 @@ class GuildRank:
     @property
     def priority(self) -> int:
         return self.__priority
+
+
+class Friend:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__id = None
+        self.__sender = None
+        self.__receiv = None
+        self.__started = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__id = self.__data.get('_id', None)
+        self.__sender = self.__data.get('uuidSender', None)
+        self.__receiv = self.__data.get('uuidReceiver', None)
+        self.__started = self.__data.get('started', None)
+
+    @property
+    def id(self):
+        return self.__id
+
+    @property
+    def sender(self):
+        return self.__sender
+
+    @property
+    def receiver(self):
+        return self.__receiv
+
+    @property
+    def started(self) -> datetime:
+        return timestamp_to_datetime(self.__started)
+
+
+class GameStatus:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__players = None
+        self.__modes = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__players = self.__data.get('players', None)
+        self.__modes = self.__data.get('modes', {})
+
+    @property
+    def players(self) -> int:
+        return self.__players
+
+    @property
+    def modes(self) -> Dict[str, int]:
+        return self.__modes

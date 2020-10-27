@@ -244,3 +244,14 @@ class Api:
         return GuildResponse(
             self.get('/guild', params=p)
         )
+
+    def friends(self, uuid: str) -> FriendResponse:
+        return FriendResponse(
+            self.get('/friends', params={'uuid': uuid})
+        )
+
+    @property
+    def game_counts(self) -> GameCountsResponse:
+        return GameCountsResponse(
+            self.get('/gameCounts')
+        )
