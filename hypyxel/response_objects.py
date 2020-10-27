@@ -730,7 +730,8 @@ class Booster:
         self.__date_activated = self.__data.get('dateActivated', None)
 
         stacked = self.__data.get('stacked', False)
-        self.__stacked = stacked if type(stacked) == bool else (i for i in stacked)
+        self.__stacked = stacked if\
+            type(stacked) == bool else (i for i in stacked)
 
     @property
     def id(self) -> str:
@@ -903,3 +904,54 @@ class GameStatus:
     @property
     def modes(self) -> Dict[str, int]:
         return self.__modes
+
+
+class Leaderboard:
+
+    def __init__(self, data: dict):
+        self.__data = data
+
+        self.__path = None
+        self.__prefix = None
+        self.__title = None
+        self.__location = None
+        self.__count = None
+        self.__leaders = None
+
+        self.__parse_data()
+
+    def __parse_data(self):
+        self.__path = self.__data.get('path', None)
+        self.__prefix = self.__data.get('prefix', None)
+        self.__title = self.__data.get('title', None)
+        self.__location = tuple(
+            int(i) for i in self.__data.get('location', ",,").split(',')
+        )
+        self.__count = self.__data.get('count', None)
+        self.__leaders = tuple(
+            i for i in self.__data.get('leaders', ())
+        )
+
+    @property
+    def path(self) -> str:
+        return self.__path
+
+    @property
+    def prefix(self) -> str:
+        return self.__prefix
+
+    @property
+    def title(self) -> str:
+        return self.__title
+
+    @property
+    def location(self) -> Tuple[int, int, int]:
+        return self.__location
+
+    @property
+    def count(self) -> int:
+        return self.__count
+
+    @property
+    def leaders(self) -> Tuple[str]:
+        return self.__leaders

@@ -622,3 +622,24 @@ class GameCountsResponse(APIResponse):
     @property
     def player_count(self) -> int:
         return self.__player_count
+
+
+class LeaderboardResponse(APIResponse):
+
+    def __init__(self, raw: dict):
+        super().__init__(raw)
+
+        self.__boards = None
+
+        self.__parse_board_data()
+
+    def __parse_board_data(self):
+
+        b = self.raw.get('leaderboards', {})
+        self.__boards = {
+            k: Leaderboard(v) for k in b.keys() for v in b.get(k)
+        }
+
+    @property
+    def leaderboards(self) -> Dict[str, Tuple[Leaderboard]]:
+        return self.__boards
