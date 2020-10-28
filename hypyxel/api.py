@@ -5,56 +5,93 @@ from .response import *
 
 
 class Guild:
+    """
+    Object managing /resources/guild/* endpoints
+    """
 
-    def __init__(self, root):
+    def __init__(self, root) -> None:
         self.__root = root
 
     @property
     def root(self):
+        """
+        Get root API object
+        :return: API object
+        """
         return self.__root
 
     @property
     def achievements(self) -> GuildAchievementsResourceResponse:
+        """
+        Perform GET request on /resources/guild/achievements endpoint
+        :return: GuildAchievementsResponse object
+        """
         return GuildAchievementsResourceResponse(
             self.root.get('/resources/guilds/achievements', public=True)
         )
 
     @property
     def permissions(self) -> PermissionsResourceResponse:
+        """
+        Perform GET request on /resources/guild/permissions endpoint
+        :return: GuildPermissionResponse object
+        """
         return PermissionsResourceResponse(
             self.root.get('/resources/guilds/permissions', public=True)
         )
 
 
 class Skyblock:
+    """
+    Object managing /resources/skyblock/* endpoints
+    """
 
-    def __init__(self, root):
+    def __init__(self, root) -> None:
         self.__root = root
 
     @property
     def root(self):
+        """
+        Get root API object
+        :return: API object
+        """
         return self.__root
 
     @property
     def collections(self) -> SkyblockCollectionsResponse:
+        """
+        Perform GET request on /resources/skyblock/collections endpoint
+        :return: SyblockCollectionsResponse object
+        """
         return SkyblockCollectionsResponse(
             self.root.get('/resources/skyblock/collections', public=True)
         )
 
     @property
     def skills(self) -> SkyblockSkillsResponse:
+        """
+        Perform GET requests on /resources/skyblock/skills endpoint
+        :return: SkyblockSkillsResponse object
+        """
         return SkyblockSkillsResponse(
             self.root.get('/resources/skyblock/skills', public=True)
         )
 
 
 class Resources:
+    """
+    Object managing /resources/* endpoints
+    """
 
-    def __init__(self, root):
+    def __init__(self, root) -> None:
         self._root = root
 
     @property
     def root(self):
+        """
+        Get Root API object
+        :return: API object
+        """
         return self._root
 
     @property
@@ -105,11 +142,15 @@ class Resources:
 
 
 class Api:
+    """
+    Main Hypyxel object
+    Managing all connections with requests library
+    """
 
     class ApiException(BaseException):
         pass
 
-    def __init__(self, key, host="https://api.hypixel.net"):
+    def __init__(self, key, host="https://api.hypixel.net") -> None:
         self._session = requests.Session()
         self._host = host
         self._key = key
@@ -224,14 +265,26 @@ class Api:
         return r.get('guild', None)
 
     @property
-    def boosters(self):
+    def boosters(self) -> BoostersResponse:
+        """
+        Get booster list
+        :return: BoostersResponse
+        """
         return BoostersResponse(
             self.get('/boosters')
         )
 
     def guild(self, id: str = None,
               player: str = None,
-              name: str = None):
+              name: str = None) -> GuildResponse:
+        """
+        Get Guild information
+        Only one of the three parameter can be set
+        :param id: Find guild by ID
+        :param player: Find guild by player name
+        :param name: Find guild by its name
+        :return: GuildResponse object
+        """
         if not bool(id) ^ bool(player) ^ bool(name):
             ValueError('One of id, player or name need to be set')
 
@@ -246,23 +299,41 @@ class Api:
         )
 
     def friends(self, uuid: str) -> FriendResponse:
+        """
+        Get player's friends list
+        :param uuid: Player UUID
+        :return: FriendResponse object
+        """
         return FriendResponse(
             self.get('/friends', params={'uuid': uuid})
         )
 
     @property
     def game_counts(self) -> GameCountsResponse:
+        """
+        Get the number of player online for each game
+        :return: GameCountsResponse
+        """
         return GameCountsResponse(
             self.get('/gameCounts')
         )
 
     def recent_games(self, uuid: str) -> RecentGamesResponse:
+        """
+        Get player's recent games
+        :param uuid: Player UUID
+        :return: RecentGamesResponse
+        """
         return RecentGamesResponse(
             self.get('/recentGames', params={'uuid': uuid})
         )
 
     @property
     def leaderboards(self) -> LeaderboardResponse:
+        """
+        Get Leaderboards information
+        :return: LeaderboardResponse object
+        """
         return LeaderboardResponse(
             self.get('/leaderboards')
         )

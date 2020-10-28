@@ -4,41 +4,60 @@ from .utils import timestamp_to_datetime, datetime
 
 
 class APIResponse:
-    def __init__(self, raw: dict):
+    """
+    BaseObject for API response
+    Managing potential API error messages
+    """
+    def __init__(self, raw: dict) -> None:
         self._raw = raw
         self._success = False
         self._error_message = None
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self._success = self._raw.get("success")
         self._error_message = self._raw.get('cause', None)
 
     @property
     def raw(self) -> dict:
+        """
+        Get the response json object
+        :return: json object
+        """
         return self._raw
 
     @property
     def success(self) -> bool:
+        """
+        Get success
+        :return: bool
+        """
         return self._success
 
     @property
     def error_message(self) -> str:
+        """
+        Get error message in case of failure
+        :return: Error message
+        """
         return self._error_message
 
 
 class ResourceResponse(APIResponse):
+    """
+    Object managing update property for resources endpoints
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._last_update = None
 
         self.__parse_resource_data()
 
-    def __parse_resource_data(self):
+    def __parse_resource_data(self) -> None:
         self._last_update = self._raw.get('lastUpdated', None)
 
     @property
@@ -51,8 +70,11 @@ class ResourceResponse(APIResponse):
 
 
 class GuildAchievementsResourceResponse(ResourceResponse):
+    """
+    Object parsing data for /resources/guild/achievements endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._one_time = tuple()
@@ -60,7 +82,7 @@ class GuildAchievementsResourceResponse(ResourceResponse):
 
         self.__parse_guild_achievements_data()
 
-    def __parse_guild_achievements_data(self):
+    def __parse_guild_achievements_data(self) -> None:
 
         self._one_time = tuple(
             HypixelOneTimeAchievement(None, *i)
@@ -90,8 +112,11 @@ class GuildAchievementsResourceResponse(ResourceResponse):
 
 
 class AchievementsResourceResponse(ResourceResponse):
+    """
+    Object parsing data for /resources/achievements endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._one_time = dict()
@@ -102,7 +127,7 @@ class AchievementsResourceResponse(ResourceResponse):
 
         self.__parse_achievements_data()
 
-    def __parse_achievements_data(self):
+    def __parse_achievements_data(self) -> None:
 
         self._one_time = {
             j: [HypixelOneTimeAchievement(j, *i)
@@ -163,15 +188,18 @@ class AchievementsResourceResponse(ResourceResponse):
 
 
 class ChallengesResourceResponse(ResourceResponse):
+    """
+    Object parsing data for /resources/challenges endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._challenges = tuple()
 
         self.__parse_challenges_data()
 
-    def __parse_challenges_data(self):
+    def __parse_challenges_data(self) -> None:
         self._challenges = tuple(HypixelChallenge(j, i)
                                  for j in self._raw.get('challenges').keys()
                                  for i in self._raw.get('challenges')[j]
@@ -187,15 +215,18 @@ class ChallengesResourceResponse(ResourceResponse):
 
 
 class QuestsResourceResponse(ResourceResponse):
+    """
+    Object parsing data for /resources/quests endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._quests = tuple()
 
         self.__parse_quests_data()
 
-    def __parse_quests_data(self):
+    def __parse_quests_data(self) -> None:
         self._quests = tuple(HypixelQuest(j, i)
                              for j in self._raw.get('quests').keys()
                              for i in self._raw.get('quests')[j]
@@ -211,15 +242,18 @@ class QuestsResourceResponse(ResourceResponse):
 
 
 class PermissionsResourceResponse(ResourceResponse):
+    """
+    Object parsing data for /resources/permissions endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self._permissions = tuple()
 
         self.__parse_permissions_data()
 
-    def __parse_permissions_data(self):
+    def __parse_permissions_data(self) -> None:
         self._permissions = tuple(HypixelPermission(i)
                                   for i in self._raw.get('permissions'))
 
@@ -233,15 +267,18 @@ class PermissionsResourceResponse(ResourceResponse):
 
 
 class SkyblockResourceResponse(ResourceResponse):
+    """
+    Object parsing data in common for /resources/skyblock/* endpoints
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__version = None
 
         self.__parse_skyblock_data()
 
-    def __parse_skyblock_data(self):
+    def __parse_skyblock_data(self) -> None:
         self.__version = self._raw.get('version', None)
 
     @property
@@ -254,15 +291,18 @@ class SkyblockResourceResponse(ResourceResponse):
 
 
 class SkyblockCollectionsResponse(SkyblockResourceResponse):
+    """
+    Object parsing data for /resources/skyblock/collections endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__collections = dict()
 
         self.__parse_collections_data()
 
-    def __parse_collections_data(self):
+    def __parse_collections_data(self) -> None:
 
         self.__collections = {
             i: HypixelSkyblockCollection(i, self._raw.get('collections')[i])
@@ -279,15 +319,18 @@ class SkyblockCollectionsResponse(SkyblockResourceResponse):
 
 
 class SkyblockSkillsResponse(SkyblockResourceResponse):
+    """
+    Object parsing data for /resources/skyblock/skills endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__skills = dict()
 
         self.__parse_skills_data()
 
-    def __parse_skills_data(self):
+    def __parse_skills_data(self) -> None:
         self.__skills = {
             i: HypixelSkyblockSkill(i, self._raw.get('collections')[i])
             for i in self._raw.get('collections', {}).keys()
@@ -303,8 +346,11 @@ class SkyblockSkillsResponse(SkyblockResourceResponse):
 
 
 class StatusResponse(APIResponse):
+    """
+    Object parsing data for /status endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__online = None
@@ -314,7 +360,7 @@ class StatusResponse(APIResponse):
 
         self.__parse_status_data()
 
-    def __parse_status_data(self):
+    def __parse_status_data(self) -> None:
         d = self._raw.get('session', {})
 
         self.__online = d.get('online', False)
@@ -324,24 +370,43 @@ class StatusResponse(APIResponse):
 
     @property
     def online(self) -> bool:
+        """
+        Get in player is online
+        :return: bool
+        """
         return self.__online
 
     @property
     def game(self) -> str:
+        """
+        Get in which game the player is on
+        :return: gameType
+        """
         return self.__game_type
 
     @property
     def mode(self) -> str:
+        """
+        Get in which mode (if available)
+        :return: game mode
+        """
         return self.__mode
 
     @property
     def map(self) -> str:
+        """
+        Get on which map (if available)
+        :return: game map
+        """
         return self.__map
 
 
 class KeyResponse(APIResponse):
+    """
+    Object parsing /key endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__key = None
@@ -352,7 +417,7 @@ class KeyResponse(APIResponse):
 
         self.__parse_key_data()
 
-    def __parse_key_data(self):
+    def __parse_key_data(self) -> None:
         d = self._raw.get('record', {})
 
         self.__key = d.get('key', None)
@@ -363,28 +428,51 @@ class KeyResponse(APIResponse):
 
     @property
     def key(self) -> str:
+        """
+        Get the key ID
+        :return: key ID
+        """
         return self.__key
 
     @property
     def owner(self) -> str:
+        """
+        Get the owner UUID
+        :return: Player UUID
+        """
         return self.__owner
 
     @property
     def limit(self) -> int:
+        """
+        Get the query limit for this key
+        :return: query limit
+        """
         return self.__limit
 
     @property
     def queries(self) -> int:
+        """
+        Get the number of query for the last minute
+        :return: number of query
+        """
         return self.__queries
 
     @property
     def total_queries(self) -> int:
+        """
+        Get the number of query made with this key
+        :return: number of query
+        """
         return self.__total_queries
 
 
 class WatchdogResponse(APIResponse):
+    """
+    Object parsing /watchdogstats endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__last_minute = -1
@@ -395,7 +483,7 @@ class WatchdogResponse(APIResponse):
 
         self.__parse_watchdog_data()
 
-    def __parse_watchdog_data(self):
+    def __parse_watchdog_data(self) -> None:
 
         self.__last_minute = self.raw.get('watchdog_lastMinute', -1)
         self.__staff_rolling = self.raw.get('staff_rollingDaily', -1)
@@ -425,15 +513,18 @@ class WatchdogResponse(APIResponse):
 
 
 class RecentGamesResponse(APIResponse):
+    """
+    Object parsing /recentGames endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__games = tuple()
 
         self.__parse_recent_game_data()
 
-    def __parse_recent_game_data(self):
+    def __parse_recent_game_data(self) -> None:
 
         self.__games = tuple(
             RecentGame(i) for i in self.raw.get('games', ())
@@ -441,12 +532,19 @@ class RecentGamesResponse(APIResponse):
 
     @property
     def games(self) -> Tuple[RecentGame]:
+        """
+        Get the recent games list
+        :return: RecentGame list
+        """
         return self.__games
 
 
 class BoostersResponse(APIResponse):
+    """
+    Object parsing /boosters endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__boosters = tuple()
@@ -454,22 +552,33 @@ class BoostersResponse(APIResponse):
 
         self.__parse_boosters_data()
 
-    def __parse_boosters_data(self):
+    def __parse_boosters_data(self) -> None:
         self.__boosters = tuple(Booster(i) for i in self.raw.get('boosters'))
         self.__decrementing = self.raw.get('boosterState').get('decrementing')
 
     @property
     def boosters(self) -> Tuple[Booster]:
+        """
+        Get the current booster list
+        :return: Booster List
+        """
         return self.__boosters
 
     @property
     def decrementing(self) -> bool:
+        """
+        Get decrementing booster status
+        :return: Bool
+        """
         return self.__decrementing
 
 
 class GuildResponse(APIResponse):
+    """
+    Object parsing /guild endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__id = None
@@ -491,7 +600,7 @@ class GuildResponse(APIResponse):
 
         self.__parse_guild_data()
 
-    def __parse_guild_data(self):
+    def __parse_guild_data(self) -> None:
         d = self.raw.get('guild', {})
 
         self.__id = d.get('_id', None)
@@ -517,91 +626,165 @@ class GuildResponse(APIResponse):
 
     @property
     def id(self) -> str:
+        """
+        Get guild ID
+        :return: Guild ID
+        """
         return self.__id
 
     @property
     def name(self) -> str:
+        """
+        Get guild name
+        :return: Guild name
+        """
         return self.__name
 
     @property
     def coins(self) -> int:
+        """
+        Get current number of coins
+        :return: Guild's coins
+        """
         return self.__coins
 
     @property
     def max_coins(self) -> int:
+        """
+        Get guild maximum number of coins
+        :return: Guild's max coins
+        """
         return self.__max_coins
 
     @property
     def created(self) -> datetime:
+        """
+        Get guild's creation date
+        :return:
+        """
         return timestamp_to_datetime(self.__created)
 
     @property
-    def members(self) ->  Tuple[GuildMember]:
+    def members(self) -> Tuple[GuildMember]:
+        """
+        Get guild's member list
+        :return: Member List
+        """
         return self.__members
 
     @property
     def tag(self) -> str:
+        """
+        Get guild's tag
+        :return: guild tag
+        """
         return self.__tag
 
     @property
     def achievements(self) -> Dict[str, int]:
+        """
+        Get guild's achievements stat
+        :return: Guild achievements stat
+        """
         return self.__achievements
 
     @property
     def exp(self) -> int:
+        """
+        Get guild EXP
+        :return: Guild EXP
+        """
         return self.__exp
 
     @property
     def legacy_rank(self) -> int:
+        """
+        Get guild's legacy rank
+        :return: legacy rank
+        """
         return self.__legacy_ranking
 
     @property
     def ranks(self) -> Tuple[GuildRank]:
+        """
+        Get guild's rank list
+        :return: rank list
+        """
         return self.__ranks
 
     @property
     def chat_mute(self) -> int:
+        """
+        Get guild's chat mute
+        :return: chat mute
+        """
         return self.__chat_mute
 
     @property
     def preferred_games(self) -> Tuple[str]:
+        """
+        Get guild's preferred games list
+        :return: preferred games list
+        """
         return self.__pref_games
 
     @property
     def publicly_listed(self) -> bool:
+        """
+        Get if the guild is publicly listed
+        :return: True if public
+        """
         return self.__public_listed
 
     @property
     def tag_color(self) -> str:
+        """
+        Get guild's tag color
+        :return: Tag color as string
+        """
         return self.__tag_color
 
     @property
     def exp_by_game(self) -> Dict[str, int]:
+        """
+        Get guild's exp dict by gametype
+        :return: EXP by gameType
+        """
         return self.__exp_by_game
 
 
 class FriendResponse(APIResponse):
+    """
+    Object parsing /friend endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__friends = tuple()
 
         self.__parse_friend_data()
 
-    def __parse_friend_data(self):
+    def __parse_friend_data(self) -> None:
         self.__friends = tuple(
             Friend(i) for i in self.raw.get('records', ())
         )
 
     @property
     def friends(self) -> Tuple[Friend]:
+        """
+        Get Friends list
+        :return: Friend list
+        """
         return self.__friends
 
 
 class GameCountsResponse(APIResponse):
+    """
+    Object parsing /gameCounts endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__games = None
@@ -609,7 +792,7 @@ class GameCountsResponse(APIResponse):
 
         self.__parse_gamecounts_data()
 
-    def __parse_gamecounts_data(self):
+    def __parse_gamecounts_data(self) -> None:
         self.__games = {
             k: GameStatus(v) for k, v in self.raw.get('games', {}).items()
         }
@@ -617,23 +800,34 @@ class GameCountsResponse(APIResponse):
 
     @property
     def games(self) -> Dict[str, GameStatus]:
+        """
+        Get game status by gameType
+        :return: game status by gameType
+        """
         return self.__games
 
     @property
     def player_count(self) -> int:
+        """
+        Get total player count
+        :return: player count
+        """
         return self.__player_count
 
 
 class LeaderboardResponse(APIResponse):
+    """
+    Object parsing /leaderboards endpoint
+    """
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: dict) -> None:
         super().__init__(raw)
 
         self.__boards = None
 
         self.__parse_board_data()
 
-    def __parse_board_data(self):
+    def __parse_board_data(self) -> None:
 
         b = self.raw.get('leaderboards', {})
         self.__boards = {
@@ -642,4 +836,8 @@ class LeaderboardResponse(APIResponse):
 
     @property
     def leaderboards(self) -> Dict[str, Tuple[Leaderboard]]:
+        """
+        Get the leaderboards for each gametype
+        :return: leaderboards for each gameType
+        """
         return self.__boards
