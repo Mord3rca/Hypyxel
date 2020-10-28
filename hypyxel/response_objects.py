@@ -3,8 +3,11 @@ from .utils import timestamp_to_datetime, datetime
 
 
 class HypixelBaseAchievement:
+    """
+    Object containing common properties for Achievements objects
+    """
 
-    def __init__(self, gname, name, data):
+    def __init__(self, gname, name, data) -> None:
         self._name = name
         self._gname = gname
         self._data = data
@@ -19,10 +22,10 @@ class HypixelBaseAchievement:
 
         self._parse_data()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{type(self).__name__}(\"{self.display_name}\")"
 
-    def _parse_data(self):
+    def _parse_data(self) -> None:
         self._desc = self._data["description"]
         self._clean_name = self._data["name"]
 
@@ -67,8 +70,11 @@ class HypixelBaseAchievement:
 
 
 class HypixelOneTimeAchievement(HypixelBaseAchievement):
+    """
+    Object containing One Time achievements specific properties
+    """
 
-    def __init__(self, gname, name, data):
+    def __init__(self, gname, name, data) -> None:
         super().__init__(gname, name, data)
 
         self._point = self._data.get("points", -1)
@@ -83,8 +89,11 @@ class HypixelOneTimeAchievement(HypixelBaseAchievement):
 
 
 class HypixelAchievementTier:
+    """
+    Object containing achievement tier data
+    """
 
-    def __init__(self, data):
+    def __init__(self, data) -> None:
         self._tier = data.get("tier")
         self._points = data.get("points")
         self._amount = data.get("amount")
@@ -115,8 +124,11 @@ class HypixelAchievementTier:
 
 
 class HypixelTieredAchievement(HypixelBaseAchievement):
+    """
+    Object containing Tiered achievements specific properties
+    """
 
-    def __init__(self, gname, name, data):
+    def __init__(self, gname, name, data) -> None:
         super().__init__(gname, name, data)
 
         self._tiers = tuple(HypixelAchievementTier(i)
@@ -137,7 +149,7 @@ class HypixelChallengeReward:
     Object representing challenge reward data
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self._type = None
@@ -145,17 +157,25 @@ class HypixelChallengeReward:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self._type = self.__data.get('type', None)
         self._amount = self.__data.get('amount', -1)
 
     @property
     def type(self) -> str:
+        """
+        Get Challenge Type
+        :return: challenge type
+        """
         return self._type
 
     @property
     def amount(self) -> int:
+        """
+        Get required amount
+        :return: required amount
+        """
         return self._amount
 
 
@@ -164,7 +184,7 @@ class HypixelChallenge:
     Object representing challenge data
     """
 
-    def __init__(self, gname: str, data: dict):
+    def __init__(self, gname: str, data: dict) -> None:
         self._gname = gname
         self._data = data
         self._id = None
@@ -173,7 +193,7 @@ class HypixelChallenge:
 
         self.__parse_challenge_data()
 
-    def __parse_challenge_data(self):
+    def __parse_challenge_data(self) -> None:
         self._id = self._data.get('id', None)
         self._name = self._data.get('name', None)
         self._rewards =\
@@ -215,10 +235,10 @@ class HypixelChallenge:
 
 class HypixelObjective:
     """
-    Object representing a Objective
+    Object representing an Objective
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
 
         self.__data = data
         self._id = None
@@ -227,7 +247,7 @@ class HypixelObjective:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self._id = self.__data.get('id', None)
         self._type = self.__data.get('type', None)
@@ -263,7 +283,7 @@ class HypixelQuest:
     Object representing a Quest
     """
 
-    def __init__(self, gname, data: dict):
+    def __init__(self, gname, data: dict) -> None:
         self.__data = data
 
         self._id = None
@@ -277,7 +297,7 @@ class HypixelQuest:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self._id = self.__data.get('id', None)
         self._name = self.__data.get('name', None)
@@ -355,7 +375,7 @@ class HypixelPermission:
     Object representing a Permission
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self._name = None
@@ -364,7 +384,7 @@ class HypixelPermission:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         info = self.__data.get('en_us', None)
 
         self._name = info.get('name', None)
@@ -401,7 +421,7 @@ class HypixelSkyblockItemTier:
     Object representing a Skyblock Item Tier
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__tier = -1
@@ -410,7 +430,7 @@ class HypixelSkyblockItemTier:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__tier = self.__data.get('tier', -1)
         self.__amountRequired = self.__data.get('amountRequired', -1)
         self.__unlocks = tuple(
@@ -447,7 +467,7 @@ class HypixelSkyblockItemCollection:
     Object representing a Skyblock Item Collection
     """
 
-    def __init__(self, id: str, data: dict):
+    def __init__(self, id: str, data: dict) -> None:
         self.__data = data
 
         self.__id = id
@@ -457,7 +477,7 @@ class HypixelSkyblockItemCollection:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__name = self.__data.get('name', None)
         self.__maxTier = self.__data.get('maxTiers', -1)
         self.__tiers = tuple(
@@ -502,7 +522,7 @@ class HypixelSkyblockCollection:
     Object representing a Skyblock Collection
     """
 
-    def __init__(self, id: str, data: dict):
+    def __init__(self, id: str, data: dict) -> None:
 
         self._data = data
 
@@ -512,7 +532,7 @@ class HypixelSkyblockCollection:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self._name = self._data.get('name', None)
 
@@ -551,7 +571,7 @@ class HypixelSkyblockSkillLevel:
     Object representing a Skyblock Skill Level
     """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__level = -1
@@ -560,7 +580,7 @@ class HypixelSkyblockSkillLevel:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__level = self.__data.get('level', -1)
         self.__exprequired = self.__data.get('totalExpRequired', -1)
         self.__unlocks = tuple(
@@ -597,7 +617,7 @@ class HypixelSkyblockSkill:
     Object representing a Skyblock Skill
     """
 
-    def __init__(self, id: str, data: dict):
+    def __init__(self, id: str, data: dict) -> None:
         self.__data = data
 
         self.__id = id
@@ -608,7 +628,7 @@ class HypixelSkyblockSkill:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__name = self.__data.get('name', None)
         self.__desc = self.__data.get('description', None)
         self.__maxlevel = self.__data.get('maxLevel', -1)
@@ -658,20 +678,23 @@ class HypixelSkyblockSkill:
 
 
 class RecentGame:
+    """
+    Object representing a RecentGame
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
 
         self.__data = data
 
-        self.__begin = -1
-        self.__end = -1
+        self.__begin = None
+        self.__end = None
         self.__game = None
         self.__mode = None
         self.__map = None
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
 
         self.__begin = self.__data.get('date', None)
         self.__end = self.__data.get('ended', None)
@@ -681,31 +704,58 @@ class RecentGame:
 
     @property
     def begin(self) -> datetime:
+        """
+        Get the begin date for this game
+        :return: Begin date
+        """
         return timestamp_to_datetime(self.__begin)
 
     @property
     def end(self) -> datetime:
+        """
+        Get the end date for this game (None if still in progress)
+        :return: End date
+        """
         return timestamp_to_datetime(self.__end)
 
     @property
     def game(self) -> str:
+        """
+        Get the game type
+        :return: Game Type
+        """
         return self.__game
 
     @property
     def mode(self) -> str:
+        """
+        Get the game mode (if applicable)
+        :return: Game mode
+        """
         return self.__mode
 
     @property
     def map(self) -> str:
+        """
+        Get the game map (if applicable)
+        :return: Game map
+        """
         return self.__map
 
     def still_playing(self) -> bool:
-        return self.__end == -1
+        """
+        Return if still playing
+        :return:
+        """
+        return not bool(self.__end)
 
 
 class Booster:
+    """
+    Object representing a Booster
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
 
         self.__data = data
 
@@ -720,7 +770,7 @@ class Booster:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__id = self.__data.get('_id', None)
         self.__purchaser_uuid = self.__data.get('purchaserUuid', None)
         self.__amount = self.__data.get('amount', -1)
@@ -735,40 +785,75 @@ class Booster:
 
     @property
     def id(self) -> str:
+        """
+        Get booster ID
+        :return: Booster ID
+        """
         return self.__id
 
     @property
     def purchaser(self) -> str:
+        """
+        Get purchaser UUID
+        :return: Purchaser UUID
+        """
         return self.__purchaser_uuid
 
     @property
     def amount(self) -> int:
+        """
+        Get booster amount
+        :return: Booster amount
+        """
         return self.__amount
 
     @property
     def original_length(self) -> int:
+        """
+        Get booster original length
+        :return: Booster Original Length
+        """
         return self.__original_length
 
     @property
     def remaining_length(self) -> int:
+        """
+        Get booster remaining length
+        :return: Booster remaining length
+        """
         return self.__length
 
     @property
     def game(self) -> int:
+        """
+        Get game affected by the booster
+        :return: Game Type
+        """
         return self.__game
 
     @property
     def date(self) -> datetime:
+        """
+        Get activation date
+        :return: Booster activation date
+        """
         return timestamp_to_datetime(self.__date_activated)
 
     @property
     def stacked(self) -> Union[bool, Tuple[str]]:
+        """
+        Get if stacked / stack list
+        :return: if stacked / stacked list
+        """
         return self.__stacked
 
 
 class GuildMember:
+    """
+    Object representing a Guild Member
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__uuid = None
@@ -779,7 +864,7 @@ class GuildMember:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__uuid = self.__data.get('uuid', None)
         self.__rank = self.__data.get('rank', None)
         self.__joined = self.__data.get('joined', None)
@@ -788,28 +873,51 @@ class GuildMember:
 
     @property
     def id(self) -> str:
+        """
+        Get member UUID
+        :return: Member UUID
+        """
         return self.__uuid
 
     @property
     def rank(self) -> str:
+        """
+        Get member rank
+        :return: Member rank
+        """
         return self.__rank
 
     @property
     def joined(self) -> datetime:
+        """
+        Get join time
+        :return: Join time
+        """
         return timestamp_to_datetime(self.__joined)
 
     @property
     def quests_participation(self) -> int:
+        """
+        Get quests participation
+        :return: Quests participation
+        """
         return self.__quests_part
 
     @property
     def exp_history(self) -> Dict[str, int]:
+        """
+        Get experience history (key as YYYY-MM-DD)
+        :return: Experience History
+        """
         return self.__exp_hist
 
 
 class GuildRank:
+    """
+    Object representing a Guild Rank
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__name = None
@@ -820,7 +928,7 @@ class GuildRank:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__name = self.__data.get('name', None)
         self.__default = self.__data.get('default', None)
         self.__tag = self.__data.get('tag', None)
@@ -829,28 +937,52 @@ class GuildRank:
 
     @property
     def name(self) -> str:
+        """
+        Get Rank Name
+        :return: Rank name
+        """
         return self.__name
 
     @property
     def default(self) -> bool:
+        """
+        Get is default
+        :return: Is default ?
+        """
         return self.__default
 
     @property
     def tag(self) -> str:
+        """
+        Get tag
+        :return: Tag
+        """
         return self.__tag
 
     @property
     def created(self) -> datetime:
+        """
+        Get tag creation date
+        :return: Creation date
+        """
         return timestamp_to_datetime(self.__created)
 
     @property
     def priority(self) -> int:
+        """
+        Get priority number
+        :return: Priority Number
+        """
         return self.__priority
 
 
 class Friend:
+    """
+    Object representing a friendship
+    This one is magic
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__id = None
@@ -860,32 +992,51 @@ class Friend:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__id = self.__data.get('_id', None)
         self.__sender = self.__data.get('uuidSender', None)
         self.__receiv = self.__data.get('uuidReceiver', None)
         self.__started = self.__data.get('started', None)
 
     @property
-    def id(self):
+    def id(self) -> str:
+        """
+        Get friendship ID
+        :return: Friendship ID
+        """
         return self.__id
 
     @property
-    def sender(self):
+    def sender(self) -> str:
+        """
+        Get sender UUID
+        :return: Sender UUID
+        """
         return self.__sender
 
     @property
-    def receiver(self):
+    def receiver(self) -> str:
+        """
+        Get receiver UUID
+        :return: Receiver UUID
+        """
         return self.__receiv
 
     @property
     def started(self) -> datetime:
+        """
+        Get friendship start date
+        :return: Friendship start date
+        """
         return timestamp_to_datetime(self.__started)
 
 
 class GameStatus:
+    """
+    Object representing a Game Status
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__players = None
@@ -893,22 +1044,33 @@ class GameStatus:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__players = self.__data.get('players', None)
         self.__modes = self.__data.get('modes', {})
 
     @property
     def players(self) -> int:
+        """
+        Get number of player
+        :return: Number of player
+        """
         return self.__players
 
     @property
     def modes(self) -> Dict[str, int]:
+        """
+        Get number of player for each modes
+        :return: Number of player for every modes
+        """
         return self.__modes
 
 
 class Leaderboard:
+    """
+    Object representing a Leaderboard Entry
+    """
 
-    def __init__(self, data: dict):
+    def __init__(self, data: dict) -> None:
         self.__data = data
 
         self.__path = None
@@ -920,7 +1082,7 @@ class Leaderboard:
 
         self.__parse_data()
 
-    def __parse_data(self):
+    def __parse_data(self) -> None:
         self.__path = self.__data.get('path', None)
         self.__prefix = self.__data.get('prefix', None)
         self.__title = self.__data.get('title', None)
@@ -934,24 +1096,48 @@ class Leaderboard:
 
     @property
     def path(self) -> str:
+        """
+        Get path
+        :return: Path
+        """
         return self.__path
 
     @property
     def prefix(self) -> str:
+        """
+        Get prefix
+        :return: prefix
+        """
         return self.__prefix
 
     @property
     def title(self) -> str:
+        """
+        Get title
+        :return: Title
+        """
         return self.__title
 
     @property
     def location(self) -> Tuple[int, int, int]:
+        """
+        Get location
+        :return: location (x,y,z)
+        """
         return self.__location
 
     @property
     def count(self) -> int:
+        """
+        Get number of leader
+        :return: number of leaders
+        """
         return self.__count
 
     @property
     def leaders(self) -> Tuple[str]:
+        """
+        Get leader's UUID (10 max)
+        :return: Leader's UUDID
+        """
         return self.__leaders
