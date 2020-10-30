@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "records": [
+    {
+      "_id": "5f5898540cf29d31caa82593",
+      "uuidSender": "46c2bebc24ee44585894a73bd029f637",
+      "uuidReceiver": "21071c044ecb43728a630fb49797a152",
+      "started": 1599641684473
+    }
+  ]
+}

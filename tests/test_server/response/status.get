@@ -1,0 +1,8 @@
+{
+  "success": true,
+  "session": {
+    "online": true,
+    "gameType": "SKYBLOCK",
+    "mode": "dynamic"
+  }
+}
