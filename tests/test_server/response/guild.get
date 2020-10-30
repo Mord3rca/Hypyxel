@@ -1,0 +1,106 @@
+{
+  "success": true,
+  "guild": {
+    "_id": "553490650cf26f12ae5bac8f",
+    "name": "Mini Squid",
+    "coins": 425310,
+    "coinsEver": 1835310,
+    "created": 1429508197967,
+    "members": [
+      {
+        "uuid": "20934ef9488c465180a78f861586b4cf",
+        "rank": "GUILDMASTER",
+        "joined": 1429508197967,
+        "questParticipation": 139,
+        "expHistory": {
+          "2020-10-31": 0,
+          "2020-10-30": 0,
+          "2020-10-29": 513,
+          "2020-10-28": 0,
+          "2020-10-27": 454,
+          "2020-10-26": 0,
+          "2020-10-25": 617
+        }
+      },
+      {
+        "uuid": "6a12d6f63e134c8bbebc70d90a797281",
+        "rank": "Famous",
+        "joined": 1518021755919,
+        "questParticipation": 311,
+        "expHistory": {
+          "2020-10-31": 0,
+          "2020-10-30": 975,
+          "2020-10-29": 6022,
+          "2020-10-28": 157,
+          "2020-10-27": 0,
+          "2020-10-26": 0,
+          "2020-10-25": 0
+        }
+      },
+      {
+        "uuid": "a99d9661fe2d4594a6b3d910c85cc4a4",
+        "rank": "MEMBER",
+        "joined": 1530770040736,
+        "questParticipation": 800,
+        "expHistory": {
+          "2020-10-31": 0,
+          "2020-10-30": 0,
+          "2020-10-29": 0,
+          "2020-10-28": 0,
+          "2020-10-27": 0,
+          "2020-10-26": 0,
+          "2020-10-25": 0
+        }
+      }
+    ],
+    "tag": "\u00a7a1\u00a7e2\u00a7c3\u00a77",
+    "banner": {
+      "Base": 15,
+      "Patterns": [
+        {
+          "Pattern": "bo",
+          "Color": "9"
+        },
+        {
+          "Pattern": "bri",
+          "Color": "5"
+        }
+      ]
+    },
+    "achievements": {
+      "WINNERS": 1080,
+      "EXPERIENCE_KINGS": 316804,
+      "ONLINE_PLAYERS": 125
+    },
+    "exp": 272653286,
+    "legacyRanking": 2891,
+    "ranks": [
+      {
+        "name": "Famous",
+        "default": false,
+        "tag": "F",
+        "created": 1562382958149,
+        "priority": 3
+      },
+      {
+        "name": "Member",
+        "default": true,
+        "tag": null,
+        "created": 1562383012859,
+        "priority": 2
+      }
+    ],
+    "name_lower": "mini squid",
+    "chatMute": 0,
+    "preferredGames": [
+      "SKYWARS"
+    ],
+    "publiclyListed": true,
+    "tagColor": "GRAY",
+    "guildExpByGameType": {
+      "DUELS": 25140197,
+      "BUILD_BATTLE": 10760738,
+      "HOUSING": 22466784
+    }
+  }
+}

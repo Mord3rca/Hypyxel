@@ -1,0 +1,45 @@
+{
+  "success": true,
+  "games": {
+    "MAIN_LOBBY": {
+      "players": 278
+    },
+    "SKYBLOCK": {
+      "players": 29857,
+      "modes": {
+        "combat_1": 803,
+        "dungeon_hub": 680,
+        "foraging_1": 936,
+        "hub": 10666,
+        "mining_2": 788,
+        "dungeon": 1524,
+        "combat_2": 145,
+        "farming_2": 120,
+        "mining_1": 227,
+        "farming_1": 106,
+        "combat_3": 1651,
+        "dynamic": 12212
+      }
+    },
+    "SKYWARS": {
+      "players": 3363,
+      "modes": {
+        "solo_insane_lucky": 6,
+        "solo_insane_slime": 73,
+        "teams_insane_slime": 2,
+        "teams_insane_rush": 1,
+        "teams_insane": 265,
+        "solo_normal": 828,
+        "solo_insane_hunters_vs_beasts": 13,
+        "ranked_normal": 193,
+        "solo_insane_tnt_madness": 2,
+        "mega_doubles": 14,
+        "solo_insane_rush": 15,
+        "solo_insane": 1002,
+        "teams_normal": 363,
+        "mega_normal": 1
+      }
+    }
+  },
+  "playerCount": 59875
+}

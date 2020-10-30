@@ -1,0 +1,10 @@
+{
+  "success": true,
+  "record": {
+    "key": "test-key-ftw",
+    "owner": "1337-G4M3R",
+    "limit": 120,
+    "queriesInPastMin": 99,
+    "totalQueries": 42
+  }
+}
