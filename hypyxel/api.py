@@ -189,7 +189,7 @@ class Api:
                 raise self.ApiException(
                     f"Hypyxel: {j.get('message', 'Unknown Error')}"
                 )
-            except:
+            except json.JSONDecodeError:
                 raise self.ApiException("Hypyxel: Unknown Error")
 
         return json.loads(r.text)
