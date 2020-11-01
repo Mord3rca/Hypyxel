@@ -14,8 +14,6 @@ class HypixelBaseAchievement:
 
         self._desc = ""
         self._clean_name = ""
-        self._gamePercentUnlocked = -1
-        self._globalPercentUnlocked = -1
 
         self._secret = False
         self._legacy = False
@@ -28,13 +26,6 @@ class HypixelBaseAchievement:
     def _parse_data(self) -> None:
         self._desc = self._data["description"]
         self._clean_name = self._data["name"]
-
-        # Those ones are not always there.
-        self._gamePercentUnlocked = self._data.get("gamePercentUnlocked", None)
-        self._globalPercentUnlocked =\
-            self._data.get("globalPercentUnlocked", None)
-        self._secret = self._data.get("secret", False)
-        self._legacy = self._data.get("legacy", False)
 
     @property
     def game(self) -> str:
@@ -79,6 +70,13 @@ class HypixelOneTimeAchievement(HypixelBaseAchievement):
 
         self._point = self._data.get("points", -1)
 
+        self._gamePercentUnlocked = self._data.get("gamePercentUnlocked", None)
+        self._globalPercentUnlocked = \
+            self._data.get("globalPercentUnlocked", None)
+
+        self._secret = self._data.get("secret", False)
+        self._legacy = self._data.get("legacy", False)
+
     @property
     def point(self) -> int:
         """
@@ -86,6 +84,34 @@ class HypixelOneTimeAchievement(HypixelBaseAchievement):
         :return: Number of point as int
         """
         return self._point
+
+    @property
+    def secret(self) -> bool:
+        """
+        Get if the achievement is secret
+        :return: Secret
+        """
+        return self._secret
+
+    @property
+    def legacy(self) -> bool:
+        """
+        Get if the achievements is legacy
+        :return: Legacy
+        """
+        return self._legacy
+
+    @property
+    def game_percent_unlocked(self) -> float:
+        """
+
+        :return:
+        """
+        return self._gamePercentUnlocked
+
+    @property
+    def global_percent_unlocked(self) -> float:
+        return self._globalPercentUnlocked
 
 
 class HypixelAchievementTier:
