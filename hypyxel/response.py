@@ -2,6 +2,8 @@ from typing import Dict, Tuple
 from .response_objects import *
 from .utils import timestamp_to_datetime, datetime
 
+from datetime import timedelta
+
 
 class APIResponse:
     """
@@ -841,3 +843,202 @@ class LeaderboardResponse(APIResponse):
         :return: leaderboards for each gameType
         """
         return self.__boards
+
+
+class PlayerResponse(APIResponse):
+
+    def __init__(self, raw: dict) -> None:
+        super().__init__(raw)
+
+        self.__id = None
+        self.__display_name = None
+        self.__known_aliases = tuple()
+        self.__known_aliases_lower = tuple()
+        self.__player_name = None
+        self.__stats = dict()
+        self.__uuid = None
+        self.__last_login = None
+        self.__last_logout = None
+        self.__achievements_one_time = tuple()
+        self.__achievements_tracking = tuple()
+        self.__achievements_tiered = dict()
+        self.__achievement_points = None
+        self.__network_exp = None
+        self.__pet_consumable = dict()
+        self.__hypixel_level = None
+        self.__rank = None
+
+        self.__parse_player_data()
+
+    def __parse_player_data(self):
+        d = self._raw.get("player", {})
+
+        self.__id = d.get("_id", None)
+        self.__display_name = d.get('displayname')
+        self.__known_aliases = tuple(d.get("knownAliases", ()))
+        self.__known_aliases_lower = tuple(d.get('knownAliasesLower', ()))
+        self.__player_name = d.get('playername', None)
+        self.__uuid = d.get('uuid', None)
+        self.__last_login = d.get('lastLogin', None)
+        self.__last_logout = d.get('lastLogout', None)
+        self.__achievements_one_time = tuple(d.get('achievementsOneTime', ()))
+        self.__achievements_tracking = tuple(d.get('achievementTracking', ()))
+        self.__achievements_tiered = d.get('achievements', {})
+        self.__achievement_points = d.get('achievementPoints', None)
+        self.__network_exp = d.get('networkExp', None)
+        self.__pet_consumable = d.get('petConsumables', {})
+        self.__rank = d.get('newPackageRank', None)
+
+        # Parse Hypixel Level
+        levels = [int(i.split('_')[1]) for i in
+                  filter(lambda x: x.startswith('levelingReward_'), d.keys())]
+        self.__hypixel_level = max(levels) + 1
+
+        self.__stats = {
+            k: game_mode_to_player_stat_obj.get(k, NotImplementedPlayerStat)(v)
+            for k, v in d.get('stats', {}).items()
+        }
+
+    @property
+    def id(self) -> str:
+        """
+        Get player ID
+        :return: Player ID
+        """
+        return self.__id
+
+    @property
+    def display_name(self) -> str:
+        """
+        Get player's display name
+        :return: Player's display name
+        """
+        return self.__display_name
+
+    @property
+    def known_aliases(self) -> Tuple[str]:
+        """
+        Get player's aliases list
+        :return: Aliases List
+        """
+        return self.__known_aliases
+
+    @property
+    def known_aliases_lower(self) -> Tuple[str]:
+        """
+        Get player's aliases list
+        :return: Aliases list (to lower)
+        """
+        return self.__known_aliases_lower
+
+    @property
+    def playername(self) -> str:
+        """
+        Get player name
+        :return: Player name
+        """
+        return self.__player_name
+
+    @property
+    def uuid(self) -> str:
+        """
+        Get player UUID
+        :return: UUID
+        """
+        return self.__uuid
+
+    @property
+    def last_login(self) -> datetime:
+        """
+        Get last login
+        :return: Last login
+        """
+        return timestamp_to_datetime(self.__last_login)
+
+    @property
+    def last_logout(self) -> datetime:
+        """
+        Get last logout
+        :return: Last Logout
+        """
+        return timestamp_to_datetime(self.__last_logout)
+
+    @property
+    def is_online(self) -> bool:
+        return self.__last_login > self.__last_logout
+
+    @property
+    def last_session_duration(self) -> timedelta:
+        if self.is_online:
+            raise ValueError("Session still in progress")
+
+        return timedelta(
+            milliseconds=self.__last_logout - self.__last_login
+        )
+
+    @property
+    def achievements_one_time(self) -> Tuple[str]:
+        """
+        Get player's one time achivements
+        :return: One Time Achievements
+        """
+        return self.__achievements_one_time
+
+    @property
+    def achievements_tiered(self) -> Dict[str, int]:
+        """
+        Get player tiered achievements data
+        :return: Player tiered achievements data
+        """
+        return self.__achievements_tiered
+
+    @property
+    def tracked_achievements(self) -> Tuple[str]:
+        """
+        Get player tracked achievements list
+        :return: Tracked Achievements
+        """
+        return self.__achievements_tracking
+
+    @property
+    def achievement_points(self) -> int:
+        """
+        Get player achievement points
+        :return: Achievement Points
+        """
+        return self.__achievement_points
+
+    @property
+    def network_exp(self) -> int:
+        """
+        Get player network exp
+        :return: Network exp
+        """
+        return self.__network_exp
+
+    @property
+    def network_level(self) -> int:
+        return self.__hypixel_level
+
+    @property
+    def pet_consumable(self) -> Dict[str, int]:
+        """
+        Get pet consumable available
+        :return: Pet Consumable
+        """
+        return self.__pet_consumable
+
+    @property
+    def stats(self) -> Dict[str, object]:
+        """
+        Get stats by games
+        :return: Stats
+        """
+        return self.__stats
+
+    def is_achievement_unlocked(self, a: HypixelOneTimeAchievement) -> bool:
+        if not isinstance(a, HypixelOneTimeAchievement):
+            raise ValueError("Achievement need to be a One Time Achievement")
+
+        return f"{a.game.lower()}_{a.name.lower()}"\
+               in self.achievements_one_time

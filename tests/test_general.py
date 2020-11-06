@@ -1,5 +1,5 @@
 from hypyxel import Api
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from .utils import *
 
@@ -271,7 +271,42 @@ class GeneralEndpoints(HypyxelTestCase):
         }, self.API_RESPONSE_PROPERTIES)
 
     def test_player(self):
-        pass
+
+        p = self.api.get_player('some-random-id')
+        ot = self.api.resources.achievements.one_time['skyblock']
+
+        self.properties_full_check(p, {
+            'id': 'some-random-id',
+            'display_name': 'xxNoScopexx',
+            'known_aliases': ("xxNoScopexx",),
+            'known_aliases_lower': (
+                "I'm a sheep",
+                "xxNoScopexx"
+            ),
+            'playername': 'xxNoScopexx',
+            'uuid': 'some-random-uuid',
+            'last_login': datetime.fromtimestamp(1605081279473/1000),
+            'last_logout': datetime.fromtimestamp(1605081641570/1000),
+            'last_session_duration': timedelta(
+                milliseconds=1605081641570-1605081279473
+            ),
+            'is_online': False,
+            'achievements_one_time': (
+                "general_first_join",
+                "skyblock_explosive_ending"
+            ),
+            'achievements_tiered': self.SkipValue,
+            'tracked_achievements': tuple(),
+            'achievement_points': 525,
+            'network_exp': 1408966,
+            'network_level': 31,
+            'pet_consumable': self.SkipValue,
+            'stats': self.SkipValue,
+            'is_achievement_unlocked': self.SkipValue,
+        }, self.API_RESPONSE_PROPERTIES)
+
+        self.assertTrue(p.is_achievement_unlocked(ot[0]))
+        self.assertFalse(p.is_achievement_unlocked(ot[1]))
 
     def test_player_count(self):
 

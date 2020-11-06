@@ -1167,3 +1167,103 @@ class Leaderboard:
         :return: Leader's UUDID
         """
         return self.__leaders
+
+
+class PlayerStat:
+
+    def __init__(self, data: dict) -> None:
+        self._data = data
+
+
+class PlayerStatCoin(PlayerStat):
+    """
+    Used for games which have only coins property
+    """
+
+    def __init__(self, data: dict) -> None:
+        super().__init__(data)
+
+        self.__coins = data.get('coins', None)
+
+    @property
+    def coins(self) -> int:
+        """
+        Get Stat coins
+        :return: Coins
+        """
+        return self.__coins
+
+
+class PlayerStatHungerGame(PlayerStatCoin):
+
+    def __init__(self, data: dict):
+        super().__init__(data)
+
+        self.__deaths = data.get('death', None)
+        self.__kills = data.get('kills', None)
+        self.__last_tourney_ad = data.get('lastTourneyAd', None)
+
+    @property
+    def deaths(self) -> int:
+        return self.__deaths
+
+    @property
+    def kills(self) -> int:
+        return self.__kills
+
+    @property
+    def last_tourney_ad(self) -> datetime:
+        return timestamp_to_datetime(self.__last_tourney_ad)
+
+
+class SkyblockProfile:
+
+    def __init__(self, data: dict):
+        self._data = data
+
+        self.__id = data.get('profile_id', None)
+        self.__name = data.get('cute_name', None)
+
+    @property
+    def id(self) -> str:
+        return self.__id
+
+    @property
+    def name(self) -> str:
+        return self.__name
+
+
+class PlayerStatSkyblock(PlayerStat):
+
+    def __init__(self, data: dict):
+        super().__init__(data)
+
+        self.__profiles = tuple(
+            SkyblockProfile(i) for i in data.get('profiles', {}).values()
+        )
+
+    @property
+    def profiles(self) -> Tuple[SkyblockProfile]:
+        return self.__profiles
+
+
+class NotImplementedPlayerStat:
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+
+game_mode_to_player_stat_obj = {
+    "HungerGames": PlayerStatHungerGame,
+    "SkyBlock": PlayerStatSkyblock,
+    "Arcade": PlayerStatCoin,
+    "Arena": PlayerStatCoin,
+    "GingerBread": PlayerStatCoin,
+    "VampireZ": PlayerStatCoin,
+    "Walls3": PlayerStatCoin,
+    "MCGO": PlayerStatCoin,
+    "Battleground": PlayerStatCoin,
+    "UHC": PlayerStatCoin,
+    "TNTGames": PlayerStatCoin,
+    "SuperSmash": PlayerStatCoin,
+}

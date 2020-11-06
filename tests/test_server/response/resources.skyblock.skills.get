@@ -5,7 +5,7 @@
   "collections": {
     "MINING": {
       "name": "Mining",
-      "description": "Spelunk islands for ores and valuable materials to earn Mining XP!",
+      "description": "Spelunk islands to earn Mining XP!",
       "maxLevel": 50,
       "levels": [
         {

@@ -344,8 +344,7 @@ class ResourcesEndpoints(HypyxelTestCase):
         self.properties_full_check(s, {
             "id": "MINING",
             "name": "Mining",
-            "description":
-                "Spelunk islands for ores and valuable materials to earn Mining XP!",
+            "description": "Spelunk islands to earn Mining XP!",
             "max_level": 50,
             "levels": self.SkipValue
         })
