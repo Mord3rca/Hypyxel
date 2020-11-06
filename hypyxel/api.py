@@ -337,3 +337,13 @@ class Api:
         return LeaderboardResponse(
             self.get('/leaderboards')
         )
+
+    def get_player(self, uuid: str) -> PlayerResponse:
+        """
+        Get Player info
+        :param uuid: Player's UUID
+        :return: Player info
+        """
+        return PlayerResponse(
+            self.get('/player', {'uuid': uuid})
+        )
